@@ -2,152 +2,220 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Chi tiết sản phẩm - UEH TechStore</title>
-    <!-- Bootstrap 3.3.7 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <!-- xZoom CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/xzoom/dist/xzoom.css">
-    <!-- Bootstrap Star Rating CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/css/star-rating.min.css">
+    <title>UEH TechStore - Hệ thống Phụ kiện & Công nghệ Chính hãng</title>
+    
+    <!-- Google Fonts tiếng Việt -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 3.4.1 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    
+    <!-- Kartik-v Bootstrap Star Rating CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/css/star-rating.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.min.css">
+
     <style>
-        body { padding-top: 70px; background-color: #f8f9fa; }
-        .xzoom-container { text-align: center; }
-        .xzoom { width: 100%; max-width: 400px; border: 1px solid #ddd; border-radius: 4px; }
-        .xzoom-thumbs { margin-top: 12px; }
-        .xzoom-gallery { width: 70px; height: 70px; object-fit: cover; border: 1px solid #ccc; margin: 0 4px; cursor: pointer; }
-        .xactive { border: 2px solid #1a73e8; }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            padding-top: 75px;
+            background-color: #f4f6f9;
+            color: #2d3436;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e1e8ed;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .navbar-custom .navbar-brand { color: #0056b3; font-weight: 700; font-size: 20px; }
+        .navbar-custom .navbar-nav > li > a { color: #333; font-weight: 500; }
+        .navbar-custom .navbar-nav > .active > a,
+        .navbar-custom .navbar-nav > li > a:hover { color: #0056b3; background-color: #eef5ff; }
+
+        /* Banner Carousel */
+        .hero-banner {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .banner-slide {
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+        }
+        .slide-1 { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+        .slide-2 { background: linear-gradient(135deg, #1a2980, #26d0ce); }
+        .banner-slide h2 { font-weight: 700; font-size: 30px; margin-bottom: 10px; }
+        .banner-slide p { font-size: 16px; opacity: 0.9; margin-bottom: 20px; }
+
+        /* Danh mục bên trái */
+        .category-box {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .category-box h4 {
+            font-weight: 700;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 8px;
+        }
+        .list-group-item { border: none; border-radius: 6px !important; margin-bottom: 4px; font-weight: 500; transition: all 0.2s; }
+        .list-group-item:hover { background-color: #eef5ff; color: #0056b3; padding-left: 20px; }
+        .list-group-item .badge { background-color: #0056b3; }
+
+        /* Thẻ sản phẩm */
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            margin-bottom: 25px;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        /* Khung ảnh sản phẩm SVG luôn hiển thị 100% */
+        .img-container {
+            position: relative;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .img-container svg {
+            width: 110px;
+            height: 110px;
+            transition: transform 0.35s ease;
+        }
+        .product-card:hover .img-container svg {
+            transform: scale(1.1);
+        }
+
+        /* Phần trăm giảm giá góc trên bên trái */
+        .badge-discount {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background-color: #ff424e;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(255, 66, 78, 0.4);
+            z-index: 10;
+        }
+
+        /* Nhãn New / Best Seller góc trên bên phải */
+        .badge-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+        .status-new { background-color: #e60000; box-shadow: 0 2px 6px rgba(230, 0, 0, 0.4); }
+        .status-bestseller { background-color: #ff9f1a; box-shadow: 0 2px 6px rgba(255, 159, 26, 0.4); }
+
+        .product-body { padding: 16px; }
+        .product-title {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            height: 42px;
+            overflow: hidden;
+            margin: 0 0 10px 0;
+        }
+        .product-title a { color: #2d3436; text-decoration: none; }
+        .product-title a:hover { color: #0056b3; }
+
+        .price-box { margin-bottom: 12px; }
+        .price-current { color: #ff424e; font-size: 18px; font-weight: 700; }
+        .price-original { color: #95a5a6; font-size: 13px; text-decoration: line-through; margin-left: 8px; }
+
+        /* Thanh trạng thái kho Bootstrap Progress */
+        .stock-progress {
+            height: 20px;
+            border-radius: 10px;
+            background-color: #ffeaa7;
+            margin-bottom: 12px;
+        }
+        .stock-progress.danger-bg { background-color: #ffcccc; }
+        .stock-progress.success-bg { background-color: #dff9fb; }
+        .stock-progress .progress-bar { line-height: 20px; font-size: 11px; font-weight: 600; border-radius: 10px; }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f1f2f6;
+            padding-top: 10px;
+        }
+        .review-count { font-size: 12px; color: #7f8c8d; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-custom navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="ecommerce.html"><strong>UEH TechStore</strong></a>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+                    <span class="icon-bar" style="background:#333;"></span>
+                    <span class="icon-bar" style="background:#333;"></span>
+                    <span class="icon-bar" style="background:#333;"></span>
+                </button>
+                <a class="navbar-brand" href="ecommerce.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
             </div>
-            <ul class="nav navbar-nav">
-                <li><a href="ecommerce.html">Trang chủ</a></li>
-                <li class="active"><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
-                <li><a href="ecommerce-status.html">Quản lý đơn hàng</a></li>
-            </ul>
+            <div class="collapse navbar-collapse" id="main-navbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="ecommerce.html">Trang chủ</a></li>
+                    <li><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
+                    <li><a href="ecommerce-status.html">Theo dõi đơn hàng</a></li>
+                </ul>
+                <form class="navbar-form navbar-left hidden-xs">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Tìm tai nghe, bàn phím, chuột...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button"><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="ecommerce-status.html"><i class="glyphicon glyphicon-shopping-cart"></i> Giỏ hàng <span class="badge" style="background:#ff424e;">3</span></a></li>
+                    <li><a href="#"><i class="glyphicon glyphicon-user"></i> Đăng nhập</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="container">
-        <div class="row">
-            <!-- Categories -->
-            <div class="col-sm-4 col-md-3">
-                <h3>Danh mục</h3>
-                <ul class="list-group">
-                    <li class="list-group-item"><span class="badge">14</span>Laptop & MacBook</li>
-                    <li class="list-group-item active"><span class="badge">22</span>Tai nghe & Âm thanh</li>
-                    <li class="list-group-item"><span class="badge">18</span>Bàn phím & Chuột</li>
-                </ul>
-            </div>
-
-            <!-- Nội dung chi tiết -->
-            <div class="col-sm-8 col-md-9">
-                <div class="thumbnail" style="padding: 20px; background: #fff;">
-                    <div class="row">
-                        <!-- Cột trái: Thư viện xZoom chọn & phóng to ảnh -->
-                        <div class="col-sm-6">
-                            <div class="xzoom-container">
-                                <img class="xzoom" id="xzoom-default" src="https://placehold.co/500x400/222222/ffffff?text=Sony+XM5+Den+(1)" xoriginal="https://placehold.co/1000x800/222222/ffffff?text=Sony+XM5+Den+HD" />
-                                <div class="xzoom-thumbs">
-                                    <a href="https://placehold.co/1000x800/222222/ffffff?text=Sony+XM5+Den+HD">
-                                        <img class="xzoom-gallery" width="70" src="https://placehold.co/500x400/222222/ffffff?text=Sony+XM5+Den+(1)" xpreview="https://placehold.co/500x400/222222/ffffff?text=Sony+XM5+Den+(1)">
-                                    </a>
-                                    <a href="https://placehold.co/1000x800/e0e0e0/111111?text=Sony+XM5+Bac+HD">
-                                        <img class="xzoom-gallery" width="70" src="https://placehold.co/500x400/e0e0e0/111111?text=Sony+XM5+Bac+(2)" xpreview="https://placehold.co/500x400/e0e0e0/111111?text=Sony+XM5+Bac+(2)">
-                                    </a>
-                                    <a href="https://placehold.co/1000x800/1565c0/ffffff?text=Sony+XM5+Xanh+HD">
-                                        <img class="xzoom-gallery" width="70" src="https://placehold.co/500x400/1565c0/ffffff?text=Sony+XM5+Xanh+(3)" xpreview="https://placehold.co/500x400/1565c0/ffffff?text=Sony+XM5+Xanh+(3)">
-                                    </a>
-                                </div>
-                            </div>
-                            <p class="text-muted text-center" style="margin-top:8px;"><small>* Di chuột vào ảnh để phóng to (xZoom)</small></p>
-                        </div>
-
-                        <!-- Cột phải: Thông tin & Form đặt hàng -->
-                        <div class="col-sm-6">
-                            <h3 style="margin-top: 0;">Tai nghe chống ồn Sony WH-1000XM5</h3>
-                            <h4 class="text-danger"><strong>6.490.000 ₫</strong> <small><del>7.990.000 ₫</del></small></h4>
-                            <p>Công nghệ chống ồn chủ động hàng đầu với 8 micro, thời lượng pin lên đến 30 giờ, hỗ trợ sạc nhanh 3 phút nghe 3 giờ.</p>
-
-                            <!-- Trạng thái kho -->
-                            <div class="progress" style="height: 20px;">
-                                <div class="progress-bar progress-bar-danger progress-bar-striped active" style="width: 85%;">
-                                    🔥 Sắp bán hết - Chỉ còn 3 sản phẩm cuối!
-                                </div>
-                            </div>
-
-                            <form role="form">
-                                <div class="form-group">
-                                    <label>Số lượng:</label>
-                                    <input type="number" class="form-control" value="1" min="1" max="10" style="width: 100px;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Màu sắc:</label>
-                                    <select class="form-control" style="width: 160px;">
-                                        <option>Đen nhám</option>
-                                        <option>Bạc Platinum</option>
-                                        <option>Xanh Midnight</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Gói bảo hành:</label><br>
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default active">12 Tháng</button>
-                                        <button type="button" class="btn btn-default">24 Tháng (+300k)</button>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-default">Liên hệ Shop</button>
-                                <a href="ecommerce-status.html" class="btn btn-success">Thêm vào giỏ hàng</a>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Khu vực đánh giá bằng Bootstrap Star Rating -->
-                <div class="well" id="comments">
-                    <h4>Đánh giá từ khách hàng</h4>
-                    <input id="user-rate" class="star-rating-input" value="4.5" data-size="sm">
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <input class="star-rating-input" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                            <strong>Nguyễn Văn An</strong> <span class="pull-right text-muted">1 ngày trước</span>
-                            <p>Chống ồn cực kỳ đỉnh, đeo học bài ở thư viện UEH không nghe tiếng ồn xung quanh luôn!</p>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <input class="star-rating-input" value="4" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                            <strong>Trần Thị Bảo</strong> <span class="pull-right text-muted">3 ngày trước</span>
-                            <p>Giao hàng nhanh, đóng gói cẩn thận, pin dùng cả tuần chưa hết.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <!-- xZoom JS -->
-    <script src="https://unpkg.com/xzoom/dist/xzoom.min.js"></script>
-    <!-- Star Rating JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-star-rating/4.0.6/js/star-rating.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Kích hoạt xZoom
-            $(".xzoom, .xzoom-gallery").xzoom({ zoomWidth: 400, title: true, tint: '#333', Xoffset: 15 });
-            // Kích hoạt Bootstrap Star Rating
-            $('.star-rating-input').rating();
-        });
-    </script>
-</body>
-</html>
+        <!-- Slider -->
+        <div id="promo-carousel" class="carousel slide hero-banner" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#promo-carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#promo-carousel" data-slide-to="1"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="banner-slide slide-1">
+                        <div>
+                            <h2>SIÊU SALE
