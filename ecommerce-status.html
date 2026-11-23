@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Trạng thái đơn hàng - UEH TechStore</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        body { padding-top: 70px; background-color: #f8f9fa; }
+        .order-row { padding: 15px; background: #fff; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="ecommerce.html"><strong>UEH TechStore</strong></a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="ecommerce.html">Trang chủ</a></li>
+                <li><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
+                <li class="active"><a href="ecommerce-status.html">Quản lý đơn hàng</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-md-3">
+                <h3>Quản lý đơn hàng</h3>
+                <ul class="list-group">
+                    <li class="list-group-item active">Tất cả đơn hàng</li>
+                    <li class="list-group-item">Đánh giá của tôi</li>
+                    <li class="list-group-item">Mã giảm giá</li>
+                    <li class="list-group-item">Địa chỉ nhận hàng</li>
+                </ul>
+            </div>
+
+            <div class="col-sm-8 col-md-9">
+                <h3>Trạng thái đơn hàng</h3>
+                <div class="order-row">
+                    <div class="row">
+                        <div class="col-sm-2"><img class="img-responsive" src="https://placehold.co/100x80/222/fff?text=Sony+XM5" alt=""></div>
+                        <div class="col-sm-4"><a href="ecommerce-detail.html"><strong>Tai nghe Sony WH-1000XM5</strong></a></div>
+                        <div class="col-sm-1">x1</div>
+                        <div class="col-sm-2">6.490.000 ₫</div>
+                        <div class="col-sm-2"><button class="btn btn-sm btn-default">Đang giao</button></div>
+                        <div class="col-sm-1"><a href="#">1 Tin nhắn</a></div>
+                    </div>
+                </div>
+                <div class="order-row">
+                    <div class="row">
+                        <div class="col-sm-2"><img class="img-responsive" src="https://placehold.co/100x80/1565c0/fff?text=MX+3S" alt=""></div>
+                        <div class="col-sm-4"><a href="ecommerce-detail.html"><strong>Chuột Logitech MX Master 3S</strong></a></div>
+                        <div class="col-sm-1">x1</div>
+                        <div class="col-sm-2">2.250.000 ₫</div>
+                        <div class="col-sm-2"><button class="btn btn-sm btn-success">Hoàn thành</button></div>
+                        <div class="col-sm-1"><a href="#">1 Tin nhắn</a></div>
+                    </div>
+                </div>
+                <div class="order-row">
+                    <div class="row">
+                        <div class="col-sm-2"><img class="img-responsive" src="https://placehold.co/100x80/c2185b/fff?text=Keychron" alt=""></div>
+                        <div class="col-sm-4"><a href="ecommerce-detail.html"><strong>Bàn phím Keychron K2 Pro</strong></a></div>
+                        <div class="col-sm-1">x1</div>
+                        <div class="col-sm-2">1.890.000 ₫</div>
+                        <div class="col-sm-2"><button class="btn btn-sm btn-danger">Đã hủy</button></div>
+                        <div class="col-sm-1"><a href="#">0 Tin nhắn</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
