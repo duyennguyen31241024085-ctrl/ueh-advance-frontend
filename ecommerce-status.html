@@ -2,24 +2,74 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trạng thái đơn hàng - UEH TechStore</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>Theo dõi đơn hàng - UEH TechStore</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <style>
-        body { padding-top: 70px; background-color: #f8f9fa; }
-        .order-row { padding: 15px; background: #fff; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            padding-top: 75px;
+            background-color: #f4f6f9;
+            color: #2d3436;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e1e8ed;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .navbar-custom .navbar-brand { color: #0056b3; font-weight: 700; font-size: 20px; }
+        .navbar-custom .navbar-nav > li > a { color: #333; font-weight: 500; }
+        .navbar-custom .navbar-nav > .active > a,
+        .navbar-custom .navbar-nav > li > a:hover { color: #0056b3; background-color: #eef5ff; }
+
+        .sidebar-box {
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+        .sidebar-box h4 {
+            font-weight: 700;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 8px;
+        }
+        .list-group-item { border: none; border-radius: 6px !important; margin-bottom: 4px; font-weight: 500; }
+        .list-group-item.active { background-color: #0056b3; }
+
+        .order-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+        }
+        .order-thumb {
+            width: 68px;
+            height: 68px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top">
+
+    <nav class="navbar navbar-custom navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="ecommerce.html"><strong>UEH TechStore</strong></a>
+                <a class="navbar-brand" href="ecommerce.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="ecommerce.html">Trang chủ</a></li>
                 <li><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
-                <li class="active"><a href="ecommerce-status.html">Quản lý đơn hàng</a></li>
+                <li class="active"><a href="ecommerce-status.html">Theo dõi đơn hàng</a></li>
             </ul>
         </div>
     </nav>
@@ -27,52 +77,104 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4 col-md-3">
-                <h3>Quản lý đơn hàng</h3>
-                <ul class="list-group">
-                    <li class="list-group-item active">Tất cả đơn hàng</li>
-                    <li class="list-group-item">Đánh giá của tôi</li>
-                    <li class="list-group-item">Mã giảm giá</li>
-                    <li class="list-group-item">Địa chỉ nhận hàng</li>
-                </ul>
+                <div class="sidebar-box">
+                    <h4><i class="glyphicon glyphicon-list-alt"></i> Quản lý đơn hàng</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item active">Tất cả đơn hàng (3)</li>
+                        <li class="list-group-item">Đánh giá của tôi</li>
+                        <li class="list-group-item">Kho mã giảm giá UEH</li>
+                        <li class="list-group-item">Sổ địa chỉ nhận hàng</li>
+                    </ul>
+                </div>
             </div>
 
             <div class="col-sm-8 col-md-9">
-                <h3>Trạng thái đơn hàng</h3>
-                <div class="order-row">
-                    <div class="row">
-                        <div class="col-sm-2"><img class="img-responsive" src="https://placehold.co/100x80/222/fff?text=Sony+XM5" alt=""></div>
-                        <div class="col-sm-4"><a href="ecommerce-detail.html"><strong>Tai nghe Sony WH-1000XM5</strong></a></div>
-                        <div class="col-sm-1">x1</div>
-                        <div class="col-sm-2">6.490.000 ₫</div>
-                        <div class="col-sm-2"><button class="btn btn-sm btn-default">Đang giao</button></div>
-                        <div class="col-sm-1"><a href="#">1 Tin nhắn</a></div>
+                <h3 style="margin-top:0; margin-bottom:20px; font-weight:700;">Trạng thái đơn hàng của bạn</h3>
+
+                <!-- Đơn 1 -->
+                <div class="order-card">
+                    <div class="row" style="width:100%; align-items:center; display:flex; flex-wrap:wrap;">
+                        <div class="col-xs-3 col-sm-2">
+                            <div class="order-thumb" style="background:#e0eafc;">
+                                <svg width="42" height="42" viewBox="0 0 64 64" fill="none">
+                                    <path d="M14 34V30C14 20.0589 22.0589 12 32 12C41.9411 12 50 20.0589 50 30V34" stroke="#1e272e" stroke-width="4" stroke-linecap="round"/>
+                                    <rect x="10" y="32" width="10" height="18" rx="5" fill="#0056b3"/>
+                                    <rect x="44" y="32" width="10" height="18" rx="5" fill="#0056b3"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="col-xs-9 col-sm-4">
+                            <a href="ecommerce-detail.html" style="font-weight:600; color:#2d3436;">Tai nghe chống ồn Sony WH-1000XM5</a>
+                            <div class="text-muted" style="font-size:12px;">Phân loại: Xanh Navy</div>
+                        </div>
+                        <div class="col-xs-3 col-sm-1">x1</div>
+                        <div class="col-xs-4 col-sm-2" style="font-weight:700; color:#ff424e;">6.490.000 ₫</div>
+                        <div class="col-xs-5 col-sm-2">
+                            <span class="label label-info" style="font-size:12px; padding:6px 10px;">Đang vận chuyển</span>
+                        </div>
+                        <div class="col-xs-12 col-sm-1 text-right">
+                            <a href="#" style="font-size:12px;"><i class="glyphicon glyphicon-envelope"></i> 1</a>
+                        </div>
                     </div>
                 </div>
-                <div class="order-row">
-                    <div class="row">
-                        <div class="col-sm-2"><img class="img-responsive" src="https://placehold.co/100x80/1565c0/fff?text=MX+3S" alt=""></div>
-                        <div class="col-sm-4"><a href="ecommerce-detail.html"><strong>Chuột Logitech MX Master 3S</strong></a></div>
-                        <div class="col-sm-1">x1</div>
-                        <div class="col-sm-2">2.250.000 ₫</div>
-                        <div class="col-sm-2"><button class="btn btn-sm btn-success">Hoàn thành</button></div>
-                        <div class="col-sm-1"><a href="#">1 Tin nhắn</a></div>
+
+                <!-- Đơn 2 -->
+                <div class="order-card">
+                    <div class="row" style="width:100%; align-items:center; display:flex; flex-wrap:wrap;">
+                        <div class="col-xs-3 col-sm-2">
+                            <div class="order-thumb" style="background:#ebedee;">
+                                <svg width="42" height="42" viewBox="0 0 64 64" fill="none">
+                                    <rect x="20" y="10" width="24" height="44" rx="12" fill="#2d3436"/>
+                                    <rect x="30" y="15" width="4" height="8" rx="2" fill="#00a8ff"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="col-xs-9 col-sm-4">
+                            <a href="ecommerce-detail.html" style="font-weight:600; color:#2d3436;">Chuột không dây Logitech MX Master 3S</a>
+                            <div class="text-muted" style="font-size:12px;">Phân loại: Xám Graphite</div>
+                        </div>
+                        <div class="col-xs-3 col-sm-1">x1</div>
+                        <div class="col-xs-4 col-sm-2" style="font-weight:700; color:#ff424e;">2.250.000 ₫</div>
+                        <div class="col-xs-5 col-sm-2">
+                            <span class="label label-success" style="font-size:12px; padding:6px 10px;">Giao thành công</span>
+                        </div>
+                        <div class="col-xs-12 col-sm-1 text-right">
+                            <a href="#" style="font-size:12px;"><i class="glyphicon glyphicon-envelope"></i> 1</a>
+                        </div>
                     </div>
                 </div>
-                <div class="order-row">
-                    <div class="row">
-                        <div class="col-sm-2"><img class="img-responsive" src="https://placehold.co/100x80/c2185b/fff?text=Keychron" alt=""></div>
-                        <div class="col-sm-4"><a href="ecommerce-detail.html"><strong>Bàn phím Keychron K2 Pro</strong></a></div>
-                        <div class="col-sm-1">x1</div>
-                        <div class="col-sm-2">1.890.000 ₫</div>
-                        <div class="col-sm-2"><button class="btn btn-sm btn-danger">Đã hủy</button></div>
-                        <div class="col-sm-1"><a href="#">0 Tin nhắn</a></div>
+
+                <!-- Đơn 3 -->
+                <div class="order-card">
+                    <div class="row" style="width:100%; align-items:center; display:flex; flex-wrap:wrap;">
+                        <div class="col-xs-3 col-sm-2">
+                            <div class="order-thumb" style="background:#c3cfe2;">
+                                <svg width="42" height="42" viewBox="0 0 64 64" fill="none">
+                                    <rect x="6" y="18" width="52" height="28" rx="4" fill="#2f3640"/>
+                                    <rect x="18" y="37" width="28" height="5" rx="1" fill="#f5f6fa"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="col-xs-9 col-sm-4">
+                            <a href="ecommerce-detail.html" style="font-weight:600; color:#2d3436;">Bàn phím cơ Keychron K2 Pro RGB</a>
+                            <div class="text-muted" style="font-size:12px;">Phân loại: Red Switch</div>
+                        </div>
+                        <div class="col-xs-3 col-sm-1">x1</div>
+                        <div class="col-xs-4 col-sm-2" style="font-weight:700; color:#ff424e;">1.890.000 ₫</div>
+                        <div class="col-xs-5 col-sm-2">
+                            <span class="label label-danger" style="font-size:12px; padding:6px 10px;">Đã hủy đơn</span>
+                        </div>
+                        <div class="col-xs-12 col-sm-1 text-right">
+                            <a href="#" style="font-size:12px;"><i class="glyphicon glyphicon-envelope"></i> 0</a>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>
