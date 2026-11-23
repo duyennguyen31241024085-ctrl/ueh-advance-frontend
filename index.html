@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UEH TechStore - Hệ thống Phụ kiện & Công nghệ Chính hãng</title>
+    
+    <!-- Google Fonts tiếng Việt -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 3.4.1 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    
+    <!-- Kartik-v Bootstrap Star Rating CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/css/star-rating.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.min.css">
+
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            padding-top: 75px;
+            background-color: #f4f6f9;
+            color: #2d3436;
+        }
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e1e8ed;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+        .navbar-custom .navbar-brand { color: #0056b3; font-weight: 700; font-size: 20px; }
+        .navbar-custom .navbar-nav > li > a { color: #333; font-weight: 500; }
+        .navbar-custom .navbar-nav > .active > a,
+        .navbar-custom .navbar-nav > li > a:hover { color: #0056b3; background-color: #eef5ff; }
+
+        /* Banner Carousel */
+        .hero-banner {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+        .banner-slide {
+            height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+            padding: 20px;
+        }
+        .slide-1 { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); }
+        .slide-2 { background: linear-gradient(135deg, #1a2980, #26d0ce); }
+        .banner-slide h2 { font-weight: 700; font-size: 30px; margin-bottom: 10px; }
+        .banner-slide p { font-size: 16px; opacity: 0.9; margin-bottom: 20px; }
+
+        /* Danh mục bên trái */
+        .category-box {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        }
+        .category-box h4 {
+            font-weight: 700;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #0056b3;
+            padding-bottom: 8px;
+        }
+        .list-group-item { border: none; border-radius: 6px !important; margin-bottom: 4px; font-weight: 500; transition: all 0.2s; }
+        .list-group-item:hover { background-color: #eef5ff; color: #0056b3; padding-left: 20px; }
+        .list-group-item .badge { background-color: #0056b3; }
+
+        /* Thẻ sản phẩm */
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            margin-bottom: 25px;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        /* Khung ảnh sản phẩm SVG luôn hiển thị 100% */
+        .img-container {
+            position: relative;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .img-container svg {
+            width: 110px;
+            height: 110px;
+            transition: transform 0.35s ease;
+        }
+        .product-card:hover .img-container svg {
+            transform: scale(1.1);
+        }
+
+        /* Phần trăm giảm giá góc trên bên trái */
+        .badge-discount {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background-color: #ff424e;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 5px 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(255, 66, 78, 0.4);
+            z-index: 10;
+        }
+
+        /* Nhãn New / Best Seller góc trên bên phải */
+        .badge-status {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            padding: 5px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            z-index: 10;
+        }
+        .status-new { background-color: #e60000; box-shadow: 0 2px 6px rgba(230, 0, 0, 0.4); }
+        .status-bestseller { background-color: #ff9f1a; box-shadow: 0 2px 6px rgba(255, 159, 26, 0.4); }
+
+        .product-body { padding: 16px; }
+        .product-title {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.4;
+            height: 42px;
+            overflow: hidden;
+            margin: 0 0 10px 0;
+        }
+        .product-title a { color: #2d3436; text-decoration: none; }
+        .product-title a:hover { color: #0056b3; }
+
+        .price-box { margin-bottom: 12px; }
+        .price-current { color: #ff424e; font-size: 18px; font-weight: 700; }
+        .price-original { color: #95a5a6; font-size: 13px; text-decoration: line-through; margin-left: 8px; }
+
+        /* Thanh trạng thái kho Bootstrap Progress */
+        .stock-progress {
+            height: 20px;
+            border-radius: 10px;
+            background-color: #ffeaa7;
+            margin-bottom: 12px;
+        }
+        .stock-progress.danger-bg { background-color: #ffcccc; }
+        .stock-progress.success-bg { background-color: #dff9fb; }
+        .stock-progress .progress-bar { line-height: 20px; font-size: 11px; font-weight: 600; border-radius: 10px; }
+
+        .rating-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f1f2f6;
+            padding-top: 10px;
+        }
+        .review-count { font-size: 12px; color: #7f8c8d; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-custom navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar">
+                    <span class="icon-bar" style="background:#333;"></span>
+                    <span class="icon-bar" style="background:#333;"></span>
+                    <span class="icon-bar" style="background:#333;"></span>
+                </button>
+                <a class="navbar-brand" href="ecommerce.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
+            </div>
+            <div class="collapse navbar-collapse" id="main-navbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="ecommerce.html">Trang chủ</a></li>
+                    <li><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
+                    <li><a href="ecommerce-status.html">Theo dõi đơn hàng</a></li>
+                </ul>
+                <form class="navbar-form navbar-left hidden-xs">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Tìm tai nghe, bàn phím, chuột...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button"><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="ecommerce-status.html"><i class="glyphicon glyphicon-shopping-cart"></i> Giỏ hàng <span class="badge" style="background:#ff424e;">3</span></a></li>
+                    <li><a href="#"><i class="glyphicon glyphicon-user"></i> Đăng nhập</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Slider -->
+        <div id="promo-carousel" class="carousel slide hero-banner" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#promo-carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#promo-carousel" data-slide-to="1"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <div class="banner-slide slide-1">
+                        <div>
+                            <h2>SIÊU SALE CÔNG NGHỆ - BACK TO SCHOOL</h2>
+                            <p>Ưu đãi độc quyền giảm đến 30% dành riêng cho sinh viên UEH</p>
+                            <a href="#products" class="btn btn-warning btn-lg" style="font-weight:600;">Khám phá ngay</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="banner-slide slide-2">
+                        <div>
+                            <h2>PHỤ KIỆN SETUP GÓC HỌC TẬP ĐỈNH CAO</h2>
+                            <p>Miễn phí giao hàng hỏa tốc trong vòng 2 giờ tại TP.HCM</p>
+                            <a href="#products" class="btn btn-default btn-lg" style="font-weight:600; color:#1a2980;">Xem bộ sưu tập</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="left carousel-control" href="#promo-carousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+            <a class="right carousel-control" href="#promo-carousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+        </div>
+
+        <div class="row" id="products">
+            <!-- Danh mục -->
+            <div class="col-sm-4 col-md-3">
+                <div class="category-box">
+                    <h4><i class="glyphicon glyphicon-th-list"></i> Danh mục sản phẩm</h4>
+                    <ul class="list-group">
+                        <li class="list-group-item"><span class="badge">14</span> Laptop & MacBook</li>
+                        <li class="list-group-item"><span class="badge">22</span> Tai nghe chống ồn</li>
+                        <li class="list-group-item"><span class="badge">18</span> Bàn phím cơ không dây</li>
+                        <li class="list-group-item"><span class="badge">9</span> Chuột công thái học</li>
+                        <li class="list-group-item"><span class="badge">15</span> Đồng hồ thông minh</li>
+                        <li class="list-group-item"><span class="badge">11</span> Cáp sạc & Pin dự phòng</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Danh sách sản phẩm -->
+            <div class="col-sm-8 col-md-9">
+                <h3 style="margin-top:0; margin-bottom:20px; font-weight:700;">Sản phẩm nổi bật hôm nay</h3>
+                <div class="row">
+                    
+                    <!-- Sản phẩm 1: Tai nghe -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="product-card">
+                            <div class="img-container" style="background: linear-gradient(135deg, #e0eafc, #cfdef3);">
+                                <span class="badge-discount">-19%</span>
+                                <span class="badge-status status-new">New</span>
+                                <a href="ecommerce-detail.html">
+                                    <svg viewBox="0 0 64 64" fill="none">
+                                        <path d="M14 34V30C14 20.0589 22.0589 12 32 12C41.9411 12 50 20.0589 50 30V34" stroke="#1e272e" stroke-width="4" stroke-linecap="round"/>
+                                        <rect x="10" y="32" width="10" height="18" rx="5" fill="#0056b3"/>
+                                        <rect x="44" y="32" width="10" height="18" rx="5" fill="#0056b3"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="product-body">
+                                <h4 class="product-title"><a href="ecommerce-detail.html">Tai nghe chống ồn Sony WH-1000XM5 Chính hãng</a></h4>
+                                <div class="price-box">
+                                    <span class="price-current">6.490.000 ₫</span>
+                                    <span class="price-original">7.990.000 ₫</span>
+                                </div>
+                                <div class="progress stock-progress danger-bg">
+                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" style="width: 88%;">
+                                        🔥 Sắp bán hết (88%)
+                                    </div>
+                                </div>
+                                <div class="rating-row">
+                                    <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html#comments" class="review-count">(48 đánh giá)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sản phẩm 2: Chuột không dây -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="product-card">
+                            <div class="img-container" style="background: linear-gradient(135deg, #fdfbfb, #ebedee);">
+                                <span class="badge-discount">-10%</span>
+                                <span class="badge-status status-bestseller">Best Seller</span>
+                                <a href="ecommerce-detail.html">
+                                    <svg viewBox="0 0 64 64" fill="none">
+                                        <rect x="20" y="10" width="24" height="44" rx="12" fill="#2d3436"/>
+                                        <line x1="32" y1="10" x2="32" y2="26" stroke="#ffffff" stroke-width="2"/>
+                                        <rect x="30" y="15" width="4" height="8" rx="2" fill="#00a8ff"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="product-body">
+                                <h4 class="product-title"><a href="ecommerce-detail.html">Chuột không dây công thái học Logitech MX Master 3S</a></h4>
+                                <div class="price-box">
+                                    <span class="price-current">2.250.000 ₫</span>
+                                    <span class="price-original">2.500.000 ₫</span>
+                                </div>
+                                <div class="progress stock-progress">
+                                    <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 55%;">
+                                        Đã bán 55/100 sản phẩm
+                                    </div>
+                                </div>
+                                <div class="rating-row">
+                                    <input class="kartik-rating" value="4.5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html#comments" class="review-count">(112 đánh giá)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sản phẩm 3: Bàn phím cơ -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="product-card">
+                            <div class="img-container" style="background: linear-gradient(135deg, #f5f7fa, #c3cfe2);">
+                                <span class="badge-discount">-25%</span>
+                                <span class="badge-status status-new">New</span>
+                                <a href="ecommerce-detail.html">
+                                    <svg viewBox="0 0 64 64" fill="none">
+                                        <rect x="6" y="18" width="52" height="28" rx="4" fill="#2f3640"/>
+                                        <rect x="11" y="23" width="6" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="19" y="23" width="6" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="27" y="23" width="6" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="35" y="23" width="6" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="43" y="23" width="10" height="5" rx="1" fill="#e84118"/>
+                                        <rect x="11" y="30" width="8" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="21" y="30" width="6" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="29" y="30" width="6" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="37" y="30" width="6" height="5" rx="1" fill="#f5f6fa"/>
+                                        <rect x="45" y="30" width="8" height="5" rx="1" fill="#00a8ff"/>
+                                        <rect x="18" y="37" width="28" height="5" rx="1" fill="#f5f6fa"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="product-body">
+                                <h4 class="product-title"><a href="ecommerce-detail.html">Bàn phím cơ không dây Keychron K2 Pro RGB</a></h4>
+                                <div class="price-box">
+                                    <span class="price-current">1.890.000 ₫</span>
+                                    <span class="price-original">2.520.000 ₫</span>
+                                </div>
+                                <div class="progress stock-progress success-bg">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" style="width: 30%;">
+                                        Còn nhiều hàng (Đã bán 30)
+                                    </div>
+                                </div>
+                                <div class="rating-row">
+                                    <input class="kartik-rating" value="4" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html#comments" class="review-count">(29 đánh giá)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sản phẩm 4: Đồng hồ thông minh -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="product-card">
+                            <div class="img-container" style="background: linear-gradient(135deg, #fff1eb, #ace0f9);">
+                                <span class="badge-discount">-15%</span>
+                                <span class="badge-status status-bestseller">Best Seller</span>
+                                <a href="ecommerce-detail.html">
+                                    <svg viewBox="0 0 64 64" fill="none">
+                                        <rect x="24" y="6" width="16" height="12" rx="2" fill="#7f8fa6"/>
+                                        <rect x="24" y="46" width="16" height="12" rx="2" fill="#7f8fa6"/>
+                                        <rect x="18" y="16" width="28" height="32" rx="7" fill="#192a56"/>
+                                        <circle cx="32" cy="32" r="9" stroke="#00a8ff" stroke-width="2.5"/>
+                                        <path d="M32 27V32L35 34" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="product-body">
+                                <h4 class="product-title"><a href="ecommerce-detail.html">Đồng hồ thông minh Apple Watch Series 9 GPS</a></h4>
+                                <div class="price-box">
+                                    <span class="price-current">8.990.000 ₫</span>
+                                    <span class="price-original">10.590.000 ₫</span>
+                                </div>
+                                <div class="progress stock-progress danger-bg">
+                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" style="width: 92%;">
+                                        🔥 Chỉ còn 2 chiếc cuối!
+                                    </div>
+                                </div>
+                                <div class="rating-row">
+                                    <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html#comments" class="review-count">(84 đánh giá)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sản phẩm 5: Loa Bluetooth -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="product-card">
+                            <div class="img-container" style="background: linear-gradient(135deg, #f6d365, #fda085);">
+                                <span class="badge-discount">-20%</span>
+                                <span class="badge-status status-new">New</span>
+                                <a href="ecommerce-detail.html">
+                                    <svg viewBox="0 0 64 64" fill="none">
+                                        <rect x="10" y="20" width="44" height="24" rx="5" fill="#2f3640"/>
+                                        <circle cx="22" cy="32" r="7" stroke="#fbc531" stroke-width="2.5"/>
+                                        <circle cx="42" cy="32" r="7" stroke="#fbc531" stroke-width="2.5"/>
+                                        <circle cx="32" cy="32" r="2" fill="#ffffff"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="product-body">
+                                <h4 class="product-title"><a href="ecommerce-detail.html">Loa Bluetooth di động Marshall Emberton II</a></h4>
+                                <div class="price-box">
+                                    <span class="price-current">3.590.000 ₫</span>
+                                    <span class="price-original">4.490.000 ₫</span>
+                                </div>
+                                <div class="progress stock-progress">
+                                    <div class="progress-bar progress-bar-warning" role="progressbar" style="width: 60%;">
+                                        Đã bán 60/100 sản phẩm
+                                    </div>
+                                </div>
+                                <div class="rating-row">
+                                    <input class="kartik-rating" value="4.5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html#comments" class="review-count">(37 đánh giá)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sản phẩm 6: MacBook Air -->
+                    <div class="col-sm-6 col-md-4">
+                        <div class="product-card">
+                            <div class="img-container" style="background: linear-gradient(135deg, #d4fc79, #96e6a1);">
+                                <span class="badge-discount">-12%</span>
+                                <span class="badge-status status-bestseller">Best Seller</span>
+                                <a href="ecommerce-detail.html">
+                                    <svg viewBox="0 0 64 64" fill="none">
+                                        <rect x="12" y="14" width="40" height="28" rx="3" fill="#2f3640"/>
+                                        <rect x="15" y="17" width="34" height="22" fill="#00a8ff"/>
+                                        <path d="M6 42H58L54 48H10L6 42Z" fill="#7f8fa6"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="product-body">
+                                <h4 class="product-title"><a href="ecommerce-detail.html">Apple MacBook Air M2 13.6 inch 8GB/256GB</a></h4>
+                                <div class="price-box">
+                                    <span class="price-current">23.490.000 ₫</span>
+                                    <span class="price-original">26.690.000 ₫</span>
+                                </div>
+                                <div class="progress stock-progress success-bg">
+                                    <div class="progress-bar progress-bar-success" role="progressbar" style="width: 25%;">
+                                        Sẵn hàng tại kho UEH
+                                    </div>
+                                </div>
+                                <div class="rating-row">
+                                    <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html#comments" class="review-count">(156 đánh giá)</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/js/star-rating.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.kartik-rating').rating({
+                theme: 'krajee-svg',
+                filledStar: '<span class="krajee-icon krajee-icon-star"></span>',
+                emptyStar: '<span class="krajee-icon krajee-icon-star"></span>'
+            });
+        });
+    </script>
+</body>
+</html>
