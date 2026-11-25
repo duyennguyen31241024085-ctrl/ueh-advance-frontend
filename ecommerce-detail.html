@@ -5,12 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Chi tiết sản phẩm - UEH TechStore</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/xzoom/dist/xzoom.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/css/star-rating.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.min.css">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="xzoom.css">
+    <link rel="stylesheet" href="star-rating.min.css">
+    <link rel="stylesheet" href="rating-theme.min.css">
 
     <style>
         body {
@@ -72,6 +72,11 @@
             background: #ff424e; color: #fff; font-weight: 700; font-size: 12px;
             padding: 3px 8px; border-radius: 4px; margin-left: 10px; vertical-align: middle;
         }
+        @media (max-width: 767px) {
+            .navbar-fixed-top { position: static; }
+            .navbar .navbar-nav { display: flex; flex-wrap: wrap; margin: 0; }
+            body { padding-top: 0; }
+        }
     </style>
 </head>
 <body>
@@ -79,11 +84,11 @@
     <nav class="navbar navbar-custom navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="ecommerce.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
+                <a class="navbar-brand" href="index.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="ecommerce.html">Trang chủ</a></li>
-                <li class="active"><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
+                <li><a href="index.html">Trang chủ</a></li>
+                <li><a href="index.html#products">Sản phẩm</a></li>
                 <li><a href="ecommerce-status.html">Giỏ hàng & Đơn hàng</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
@@ -96,74 +101,57 @@
         <div class="row">
             <div class="col-sm-4 col-md-3">
                 <div class="category-box">
-                    <h4><i class="glyphicon glyphicon-th-list"></i> Danh mục</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item"><span class="badge">14</span> Laptop & MacBook</li>
-                        <li class="list-group-item active"><span class="badge" style="background:#fff; color:#0056b3;">22</span> Tai nghe chống ồn</li>
-                        <li class="list-group-item"><span class="badge">18</span> Bàn phím cơ không dây</li>
-                        <li class="list-group-item"><span class="badge">9</span> Chuột công thái học</li>
-                    </ul>
+                    <h4><i class="glyphicon glyphicon-th-list"></i> Sản phẩm</h4>
+                    <ul class="list-group" id="product-navigation"></ul>
                 </div>
             </div>
 
             <div class="col-sm-8 col-md-9">
                 <div class="detail-card">
                     <div class="row">
-                        <!-- Cột trái: Thư viện xZoom với 3 ảnh chụp thật -->
+                        <!-- Thư viện ảnh sản phẩm -->
                         <div class="col-sm-6">
                             <div class="xzoom-container">
-                                <img class="xzoom" id="xzoom-default" alt="Ảnh minh họa tai nghe"
-                                     src="headphones.jpg"
-                                     xoriginal="headphones.jpg" />
-                                
-                                <div class="xzoom-thumbs">
-                                    <a href="headphones.jpg">
-                                        <img class="xzoom-gallery" src="headphones.jpg" xpreview="headphones.jpg" alt="Ảnh toàn cảnh tai nghe">
-                                    </a>
-
-                                    <a href="headphones-detail.jpg">
-                                        <img class="xzoom-gallery" src="headphones-detail.jpg" xpreview="headphones-detail.jpg" alt="Ảnh cận cảnh tai nghe">
-                                    </a>
-                                </div>
+                                <img class="xzoom" id="xzoom-default" alt="Ảnh minh họa sản phẩm">
+                                <div class="xzoom-thumbs" id="product-thumbs"></div>
                             </div>
                             <p class="text-muted text-center" style="margin-top:10px; font-size:12px;">
-                                <i class="glyphicon glyphicon-zoom-in"></i> Chọn ảnh toàn cảnh hoặc cận cảnh. Di chuột để phóng to (xZoom). Ảnh minh họa.
+                                <i class="glyphicon glyphicon-zoom-in"></i> Chọn ảnh toàn cảnh hoặc chi tiết. Di chuột vào ảnh lớn để phóng to (xZoom). Ảnh minh họa.
                             </p>
                         </div>
 
-                        <!-- Cột phải: Thông tin & Chọn mua thật -->
+                        <!-- Thông tin và tùy chọn sản phẩm -->
                         <div class="col-sm-6">
-                            <span class="label label-danger">NEW</span>
+                            <span id="product-badge" class="label label-danger">NEW</span>
                             <span class="label label-warning">CHÍNH HÃNG</span>
-                            <h3 style="margin-top: 10px; font-weight: 700;">Tai nghe chống ồn Sony WH-1000XM5</h3>
-                            
+                            <h3 id="product-name" style="margin-top: 10px; font-weight: 700;"></h3>
+
                             <div style="margin: 12px 0;">
-                                <span class="price-current">6.490.000 ₫</span>
-                                <span class="price-original">7.990.000 ₫</span>
-                                <span class="discount-pill">-19%</span>
+                                <span class="price-current"></span>
+                                <span class="price-original"></span>
+                                <span class="discount-pill"></span>
                             </div>
 
-                            <p style="color:#636e72; line-height:1.6;">
-                                Trang bị 2 bộ xử lý điều khiển 8 micro mang lại khả năng chống ồn chủ động hàng đầu thế giới. Pin sử dụng liên tục 30 giờ, hỗ trợ sạc nhanh 3 phút nghe nhạc 3 giờ.
-                            </p>
 
+
+                            <p id="product-description"></p>
                             <div class="progress" style="height: 20px; border-radius: 10px; background: #ffcccc;">
                                 <div class="progress-bar progress-bar-danger progress-bar-striped active" style="width: 88%; line-height:20px; font-weight:600;">
-                                    🔥 Sắp bán hết - Chỉ còn 3 sản phẩm cuối!
+
                                 </div>
                             </div>
 
-                            <form role="form">
+                            <form id="product-form">
                                 <div class="row">
                                     <div class="col-xs-5">
                                         <div class="form-group">
-                                            <label>Số lượng:</label>
-                                            <input type="number" id="prod-qty" class="form-control" value="1" min="1" max="10">
+                                            <label for="prod-qty">Số lượng:</label>
+                                            <input type="number" id="prod-qty" class="form-control" value="1" min="1" required>
                                         </div>
                                     </div>
                                     <div class="col-xs-7">
                                         <div class="form-group">
-                                            <label>Phiên bản màu:</label>
+                                            <label for="prod-color">Phiên bản:</label>
                                             <select id="prod-color" class="form-control">
                                                 <option value="Đen nhám (Matte Black)">Đen nhám (Matte Black)</option>
                                                 <option value="Bạc (Platinum Silver)">Bạc (Platinum Silver)</option>
@@ -182,8 +170,8 @@
                                 </div>
 
                                 <div style="margin-top: 20px;">
-                                    <button type="button" class="btn btn-default btn-lg" onclick="alert('Nhân viên tư vấn UEH TechStore đã nhận được yêu cầu của bạn!')"><i class="glyphicon glyphicon-comment"></i> Tư vấn</button>
-                                    <button type="button" class="btn btn-success btn-lg" style="font-weight:600;" onclick="buyNow()"><i class="glyphicon glyphicon-shopping-cart"></i> Đặt mua ngay</button>
+
+                                    <button type="submit" class="btn btn-success btn-lg" style="font-weight:600;"><i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ</button>
                                 </div>
                             </form>
                         </div>
@@ -204,34 +192,23 @@
                         </div>
                     </div>
 
-                    <div id="review-list">
-                        <div class="media">
-                            <div class="media-body">
-                                <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                <strong>Nguyễn Văn An</strong> <span class="text-muted pull-right" style="font-size:12px;">1 ngày trước</span>
-                                <p style="margin-top:5px;">Chống ồn cực kỳ đỉnh, đeo học bài ở thư viện UEH không nghe tiếng ồn xung quanh luôn, pin dùng rất trâu!</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="media">
-                            <div class="media-body">
-                                <input class="kartik-rating" value="4.5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                <strong>Trần Thị Bảo</strong> <span class="text-muted pull-right" style="font-size:12px;">3 ngày trước</span>
-                                <p style="margin-top:5px;">Giao hàng hỏa tốc 2 tiếng nhận được liền, đóng gói chống sốc cẩn thận, đeo êm tai không bị đau.</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="review-list"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/xzoom/dist/xzoom.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/js/star-rating.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="xzoom.min.js"></script>
+    <script src="star-rating.min.js"></script>
+    <script src="rating-theme.min.js"></script>
+    <script src="products.js"></script>
+    <script src="store.js"></script>
     <script>
+        const requestedId = new URLSearchParams(location.search).get("product");
+        const key = requestedId === null ? "headphones" : requestedId;
+        const product = Object.hasOwn(products, key) ? products[key] : null;
         var selectedWarranty = '12 Tháng';
 
         function selectWarranty(btn, val) {
@@ -241,52 +218,95 @@
         }
 
         function updateBadge() {
-            var cart = JSON.parse(localStorage.getItem('ueh_cart')) || [];
-            var totalQty = cart.reduce(function(sum, item) { return sum + item.qty; }, 0);
+            var cart = readStore('ueh_cart');
+            var totalQty = cart.reduce(function(sum, item) { return sum + Number(item.qty); }, 0);
             $('#cart-badge').text(totalQty);
         }
 
-        function buyNow() {
-            var qty = parseInt($('#prod-qty').val()) || 1;
-            var color = $('#prod-color').val();
-            var extraPrice = selectedWarranty === '24 Tháng' ? 300000 : 0;
-            var unitPrice = 6490000 + extraPrice;
-            var variantText = color + ' - BH ' + selectedWarranty;
-
-            var cart = JSON.parse(localStorage.getItem('ueh_cart')) || [];
-            var existing = cart.find(function(item) { return item.name === 'Tai nghe chống ồn Sony WH-1000XM5' && item.variant === variantText; });
-            if (existing) {
-                existing.qty += qty;
-            } else {
-                cart.push({
-                    name: 'Tai nghe chống ồn Sony WH-1000XM5',
-                    price: unitPrice,
-                    img: 'headphones.jpg',
-                    variant: variantText,
-                    qty: qty
-                });
+        function buyNow(event) {
+            event.preventDefault();
+            const qty = Number($('#prod-qty').val());
+            const color = $('#prod-color').val();
+            const warranty = selectedWarranty === '24 Tháng' ? 24 : 12;
+            if (!addProduct(key, qty, color, warranty)) {
+                alert('Số lượng trong giỏ đã đạt giới hạn tồn kho.');
+                return;
             }
-            localStorage.setItem('ueh_cart', JSON.stringify(cart));
             window.location.href = 'ecommerce-status.html';
         }
 
+        function renderReviews() {
+            const reviews = readStore('ueh_reviews_' + key);
+            const list = $('#review-list').empty();
+            if (!reviews.length) list.text('Chưa có nhận xét trên thiết bị này.');
+            reviews.forEach(review => {
+                const item = $('<div class="media">').appendTo(list);
+                $('<input>').val(review.rate).appendTo(item).rating({
+                    theme: 'krajee-svg', readonly: true, size: 'xs', showClear: false, showCaption: false
+                });
+                $('<p>').text(review.text).appendTo(item);
+            });
+        }
+
         function addReview() {
-            var text = $('#review-text').val().trim();
-            var rate = $('#user-rate').val();
-            if (!text) { alert('Vui lòng nhập nội dung đánh giá!'); return; }
-            var html = '<hr><div class="media"><div class="media-body"><span class="label label-warning">' + rate + ' ★</span> <strong>Sinh viên UEH (Bạn)</strong> <span class="text-muted pull-right" style="font-size:12px;">Vừa xong</span><p style="margin-top:5px;">' + text + '</p></div></div>';
-            $('#review-list').prepend(html);
+            const text = $('#review-text').val().trim();
+            const rate = Number($('#user-rate').val());
+            if (!text || rate < 0.5 || rate > 5 || !Number.isFinite(rate)) {
+                alert('Chọn số sao và nhập nội dung đánh giá.');
+                return;
+            }
+            const keyForReviews = 'ueh_reviews_' + key;
+            const reviews = readStore(keyForReviews);
+            reviews.unshift({text, rate});
+            localStorage.setItem(keyForReviews, JSON.stringify(reviews));
             $('#review-text').val('');
+            renderReviews();
         }
 
         $(document).ready(function() {
             updateBadge();
-            $(".xzoom, .xzoom-gallery").xzoom({ zoomWidth: 380, title: true, tint: '#333', Xoffset: 15 });
+            Object.entries(products).forEach(([id, item]) => {
+                const link = $('<a>').attr('href', 'ecommerce-detail.html?product=' + id).text(item.name);
+                if (id === key) link.attr('aria-current', 'page');
+                $('<li>').addClass('list-group-item').append(link).appendTo('#product-navigation');
+            });
+            if (!product) {
+                $('.detail-card').empty().append(
+                    $('<h3>').text('Không tìm thấy sản phẩm'),
+                    $('<a href="index.html#products">').text('Về danh mục sản phẩm')
+                );
+                $('#comments').hide();
+                return;
+            }
+            document.title = product.name + ' | UEH TechStore';
+            $('#product-description').text(product.description);
+            $('#product-form').on('submit', buyNow);
+            const money = value => value.toLocaleString('vi-VN') + ' ₫';
+            $('#product-name').text(product.name);
+            $('#product-badge').text(product.badge);
+            $('.price-current').text(money(product.price));
+            $('.price-original').text(money(product.original));
+            $('.discount-pill').text('-' + Math.round((1 - product.price / product.original) * 100) + '%');
+            $('.progress-bar').attr({role:'progressbar', 'aria-valuenow': product.stock, 'aria-valuemin': 0, 'aria-valuemax': 100})
+                .css('width', product.stock + '%').text(product.stock + '%');
+            $('.progress').after($('<p>').text('Đã bán ' + product.stock + '% lượng hàng'));
+            $('#prod-qty').attr('max', 100 - product.stock);
+            if (product !== products.headphones) {
+                $('#prod-color').empty().append($('<option>').text(product.variant));
+            }
+            $('#xzoom-default').attr({src:product.img, xoriginal:product.img, alt:'Ảnh minh họa ' + product.name});
+            [product.img, product.img.replace('.jpg', '-detail.jpg')].forEach((image, index) => {
+                const label = index ? 'Ảnh cận cảnh' : 'Ảnh toàn cảnh';
+                $('<a>').attr('href', image).append($('<img>').addClass('xzoom-gallery')
+                    .attr({src:image, xpreview:image, alt:label})).appendTo('#product-thumbs');
+            });
+            $(".xzoom, .xzoom-gallery").xzoom({ position: "inside", title: false, tint: '#333', Xoffset: 15 });
             $('.kartik-rating').rating({
                 theme: 'krajee-svg',
                 filledStar: '<span class="krajee-icon krajee-icon-star"></span>',
                 emptyStar: '<span class="krajee-icon krajee-icon-star"></span>'
             });
+            renderReviews();
         });
     </script>
 </body>

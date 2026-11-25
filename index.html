@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>UEH TechStore - Hệ thống Phụ kiện & Công nghệ Chính hãng</title>
-    
+
     <!-- Google Fonts tiếng Việt -->
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap 3.4.1 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-    
+    <link rel="stylesheet" href="bootstrap.min.css">
+
     <!-- Kartik-v Bootstrap Star Rating CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/css/star-rating.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.min.css">
+    <link rel="stylesheet" href="star-rating.min.css">
+    <link rel="stylesheet" href="rating-theme.min.css">
 
     <style>
         body {
@@ -201,29 +201,23 @@
                     <span class="icon-bar" style="background:#333;"></span>
                     <span class="icon-bar" style="background:#333;"></span>
                 </button>
-                <a class="navbar-brand" href="ecommerce.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
+                <a class="navbar-brand" href="index.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
             </div>
             <div class="collapse navbar-collapse" id="main-navbar">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="ecommerce.html">Trang chủ</a></li>
-                    <li><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
+                    <li class="active"><a href="index.html">Trang chủ</a></li>
+
+                    <li><a href="flappy-bird.html">Chơi Flappy Bird</a></li>
                     <li><a href="ecommerce-status.html">Giỏ hàng & Đơn hàng</a></li>
                 </ul>
-                <form class="navbar-form navbar-left hidden-xs">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Tìm tai nghe, bàn phím, chuột...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button"><i class="glyphicon glyphicon-search"></i></button>
-                        </span>
-                    </div>
-                </form>
+
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="ecommerce-status.html">
                             <i class="glyphicon glyphicon-shopping-cart"></i> Giỏ hàng <span class="badge" id="cart-badge" style="background:#ff424e;">0</span>
                         </a>
                     </li>
-                    <li><a href="#"><i class="glyphicon glyphicon-user"></i> Sinh viên UEH</a></li>
+
                 </ul>
             </div>
         </div>
@@ -265,14 +259,15 @@
             <div class="col-sm-4 col-md-3">
                 <div class="category-box">
                     <h4><i class="glyphicon glyphicon-th-list"></i> Danh mục sản phẩm</h4>
-                    <ul class="list-group">
-                        <li class="list-group-item"><span class="badge">14</span> Laptop & MacBook</li>
-                        <li class="list-group-item"><span class="badge">22</span> Tai nghe chống ồn</li>
-                        <li class="list-group-item"><span class="badge">18</span> Bàn phím cơ không dây</li>
-                        <li class="list-group-item"><span class="badge">9</span> Chuột công thái học</li>
-                        <li class="list-group-item"><span class="badge">15</span> Đồng hồ thông minh</li>
-                        <li class="list-group-item"><span class="badge">11</span> Cáp sạc & Pin dự phòng</li>
-                    </ul>
+                    <div class="list-group" id="categories">
+                        <button type="button" class="list-group-item" data-query="">Tất cả sản phẩm</button>
+                        <button type="button" class="list-group-item" data-query="MacBook">Laptop & MacBook</button>
+                        <button type="button" class="list-group-item" data-query="Tai nghe">Tai nghe</button>
+                        <button type="button" class="list-group-item" data-query="Bàn phím">Bàn phím</button>
+                        <button type="button" class="list-group-item" data-query="Chuột">Chuột</button>
+                        <button type="button" class="list-group-item" data-query="Đồng hồ">Đồng hồ</button>
+                        <button type="button" class="list-group-item" data-query="Loa">Loa Bluetooth</button>
+                    </div>
                 </div>
             </div>
 
@@ -280,20 +275,23 @@
             <div class="col-sm-8 col-md-9">
                 <h3 style="margin-top:0; margin-bottom:20px; font-weight:700;">Sản phẩm nổi bật hôm nay</h3>
                 <p class="text-muted">Ảnh minh họa sản phẩm.</p>
+                <label for="product-search">Tìm sản phẩm</label>
+                <input id="product-search" class="form-control" type="search" placeholder="Ví dụ: chuột, bàn phím" style="margin-bottom: 1rem;">
+                <p id="no-products" hidden>Không tìm thấy sản phẩm phù hợp.</p>
                 <div class="row">
-                    
+
                     <!-- Sản phẩm 1: Tai nghe -->
                     <div class="col-sm-6 col-md-4">
                         <div class="product-card">
                             <div class="img-container">
                                 <span class="badge-discount">-19%</span>
                                 <span class="badge-status status-new">New</span>
-                                <a href="ecommerce-detail.html">
+                                <a href="ecommerce-detail.html?product=headphones">
                                     <img src="headphones.jpg" alt="Tai nghe Sony">
                                 </a>
                             </div>
                             <div class="product-body">
-                                <h4 class="product-title"><a href="ecommerce-detail.html">Tai nghe chống ồn Sony WH-1000XM5 Chính hãng</a></h4>
+                                <h4 class="product-title"><a href="ecommerce-detail.html?product=headphones">Tai nghe chống ồn Sony WH-1000XM5 Chính hãng</a></h4>
                                 <div class="price-box">
                                     <span class="price-current">6.490.000 ₫</span>
                                     <span class="price-original">7.990.000 ₫</span>
@@ -305,9 +303,9 @@
                                 </div>
                                 <div class="rating-row">
                                     <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html#comments" class="review-count">(48 đánh giá)</a>
+                                    <a href="ecommerce-detail.html?product=headphones#comments" class="review-count">(48 đánh giá)</a>
                                 </div>
-                                <button class="btn btn-primary btn-block" onclick="addToCart('Tai nghe chống ồn Sony WH-1000XM5', 6490000, 'headphones.jpg', 'Đen nhám')">
+                                <button class="btn btn-primary btn-block" onclick="addToCart('headphones')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -320,12 +318,12 @@
                             <div class="img-container">
                                 <span class="badge-discount">-10%</span>
                                 <span class="badge-status status-bestseller">Best Seller</span>
-                                <a href="ecommerce-detail.html">
+                                <a href="ecommerce-detail.html?product=mouse">
                                     <img src="mouse.jpg" alt="Chuột không dây">
                                 </a>
                             </div>
                             <div class="product-body">
-                                <h4 class="product-title"><a href="ecommerce-detail.html">Chuột không dây công thái học Logitech MX Master 3S</a></h4>
+                                <h4 class="product-title"><a href="ecommerce-detail.html?product=mouse">Chuột không dây công thái học Logitech MX Master 3S</a></h4>
                                 <div class="price-box">
                                     <span class="price-current">2.250.000 ₫</span>
                                     <span class="price-original">2.500.000 ₫</span>
@@ -337,9 +335,9 @@
                                 </div>
                                 <div class="rating-row">
                                     <input class="kartik-rating" value="4.5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html#comments" class="review-count">(112 đánh giá)</a>
+                                    <a href="ecommerce-detail.html?product=mouse#comments" class="review-count">(112 đánh giá)</a>
                                 </div>
-                                <button class="btn btn-primary btn-block" onclick="addToCart('Chuột không dây Logitech MX Master 3S', 2250000, 'mouse.jpg', 'Xám Graphite')">
+                                <button class="btn btn-primary btn-block" onclick="addToCart('mouse')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -352,12 +350,12 @@
                             <div class="img-container">
                                 <span class="badge-discount">-25%</span>
                                 <span class="badge-status status-new">New</span>
-                                <a href="ecommerce-detail.html">
+                                <a href="ecommerce-detail.html?product=keyboard">
                                     <img src="keyboard.jpg" alt="Bàn phím cơ">
                                 </a>
                             </div>
                             <div class="product-body">
-                                <h4 class="product-title"><a href="ecommerce-detail.html">Bàn phím cơ không dây Keychron K2 Pro RGB</a></h4>
+                                <h4 class="product-title"><a href="ecommerce-detail.html?product=keyboard">Bàn phím cơ không dây Keychron K2 Pro RGB</a></h4>
                                 <div class="price-box">
                                     <span class="price-current">1.890.000 ₫</span>
                                     <span class="price-original">2.520.000 ₫</span>
@@ -369,9 +367,9 @@
                                 </div>
                                 <div class="rating-row">
                                     <input class="kartik-rating" value="4" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html#comments" class="review-count">(29 đánh giá)</a>
+                                    <a href="ecommerce-detail.html?product=keyboard#comments" class="review-count">(29 đánh giá)</a>
                                 </div>
-                                <button class="btn btn-primary btn-block" onclick="addToCart('Bàn phím cơ Keychron K2 Pro RGB', 1890000, 'keyboard.jpg', 'Red Switch')">
+                                <button class="btn btn-primary btn-block" onclick="addToCart('keyboard')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -384,12 +382,12 @@
                             <div class="img-container">
                                 <span class="badge-discount">-15%</span>
                                 <span class="badge-status status-bestseller">Best Seller</span>
-                                <a href="ecommerce-detail.html">
+                                <a href="ecommerce-detail.html?product=watch">
                                     <img src="watch.jpg" alt="Đồng hồ thông minh">
                                 </a>
                             </div>
                             <div class="product-body">
-                                <h4 class="product-title"><a href="ecommerce-detail.html">Đồng hồ thông minh Apple Watch Series 9 GPS</a></h4>
+                                <h4 class="product-title"><a href="ecommerce-detail.html?product=watch">Đồng hồ thông minh Apple Watch Series 9 GPS</a></h4>
                                 <div class="price-box">
                                     <span class="price-current">8.990.000 ₫</span>
                                     <span class="price-original">10.590.000 ₫</span>
@@ -401,9 +399,9 @@
                                 </div>
                                 <div class="rating-row">
                                     <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html#comments" class="review-count">(84 đánh giá)</a>
+                                    <a href="ecommerce-detail.html?product=watch#comments" class="review-count">(84 đánh giá)</a>
                                 </div>
-                                <button class="btn btn-primary btn-block" onclick="addToCart('Đồng hồ thông minh Apple Watch S9', 8990000, 'watch.jpg', '41mm Đen')">
+                                <button class="btn btn-primary btn-block" onclick="addToCart('watch')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -416,12 +414,12 @@
                             <div class="img-container">
                                 <span class="badge-discount">-20%</span>
                                 <span class="badge-status status-new">New</span>
-                                <a href="ecommerce-detail.html">
+                                <a href="ecommerce-detail.html?product=speaker">
                                     <img src="speaker.jpg" alt="Loa Bluetooth">
                                 </a>
                             </div>
                             <div class="product-body">
-                                <h4 class="product-title"><a href="ecommerce-detail.html">Loa Bluetooth di động Marshall Emberton II</a></h4>
+                                <h4 class="product-title"><a href="ecommerce-detail.html?product=speaker">Loa Bluetooth di động Marshall Emberton II</a></h4>
                                 <div class="price-box">
                                     <span class="price-current">3.590.000 ₫</span>
                                     <span class="price-original">4.490.000 ₫</span>
@@ -433,9 +431,9 @@
                                 </div>
                                 <div class="rating-row">
                                     <input class="kartik-rating" value="4.5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html#comments" class="review-count">(37 đánh giá)</a>
+                                    <a href="ecommerce-detail.html?product=speaker#comments" class="review-count">(37 đánh giá)</a>
                                 </div>
-                                <button class="btn btn-primary btn-block" onclick="addToCart('Loa Bluetooth Marshall Emberton II', 3590000, 'speaker.jpg', 'Đen cổ điển')">
+                                <button class="btn btn-primary btn-block" onclick="addToCart('speaker')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -448,12 +446,12 @@
                             <div class="img-container">
                                 <span class="badge-discount">-12%</span>
                                 <span class="badge-status status-bestseller">Best Seller</span>
-                                <a href="ecommerce-detail.html">
+                                <a href="ecommerce-detail.html?product=laptop">
                                     <img src="laptop.jpg" alt="MacBook Air">
                                 </a>
                             </div>
                             <div class="product-body">
-                                <h4 class="product-title"><a href="ecommerce-detail.html">Apple MacBook Air M2 13.6 inch 8GB/256GB</a></h4>
+                                <h4 class="product-title"><a href="ecommerce-detail.html?product=laptop">Apple MacBook Air M2 13.6 inch 8GB/256GB</a></h4>
                                 <div class="price-box">
                                     <span class="price-current">23.490.000 ₫</span>
                                     <span class="price-original">26.690.000 ₫</span>
@@ -465,9 +463,9 @@
                                 </div>
                                 <div class="rating-row">
                                     <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html#comments" class="review-count">(156 đánh giá)</a>
+                                    <a href="ecommerce-detail.html?product=laptop#comments" class="review-count">(156 đánh giá)</a>
                                 </div>
-                                <button class="btn btn-primary btn-block" onclick="addToCart('Apple MacBook Air M2 13.6 inch', 23490000, 'laptop.jpg', 'Xám Space Gray')">
+                                <button class="btn btn-primary btn-block" onclick="addToCart('laptop')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -479,32 +477,44 @@
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/js/star-rating.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-star-rating@4.1.2/themes/krajee-svg/theme.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="star-rating.min.js"></script>
+    <script src="rating-theme.min.js"></script>
+    <script src="products.js"></script>
+    <script src="store.js"></script>
     <script>
         function updateBadge() {
-            var cart = JSON.parse(localStorage.getItem('ueh_cart')) || [];
-            var totalQty = cart.reduce(function(sum, item) { return sum + item.qty; }, 0);
+            var cart = readStore('ueh_cart');
+            var totalQty = cart.reduce(function(sum, item) { return sum + Number(item.qty); }, 0);
             $('#cart-badge').text(totalQty);
         }
 
-        function addToCart(name, price, img, variant) {
-            var cart = JSON.parse(localStorage.getItem('ueh_cart')) || [];
-            var existing = cart.find(function(item) { return item.name === name && item.variant === variant; });
-            if (existing) {
-                existing.qty += 1;
-            } else {
-                cart.push({ name: name, price: price, img: img, variant: variant, qty: 1 });
+        function addToCart(id) {
+            if (!addProduct(id, 1)) {
+                alert('Bạn đã thêm hết số lượng còn trong kho.');
+                return;
             }
-            localStorage.setItem('ueh_cart', JSON.stringify(cart));
             updateBadge();
-            $('#toast-msg').fadeIn(200).delay(1500).fadeOut(300);
+            $('#toast-msg').stop(true, true).fadeIn(200).delay(1500).fadeOut(300);
         }
 
         $(document).ready(function() {
             updateBadge();
+            const cards = $('.product-card').parent();
+            $('#categories button').on('click', function() {
+                $('#product-search').val(this.dataset.query).trigger('input');
+            });
+            $('#product-search').on('input', function() {
+                const search = normalizeSearch(this.value.trim());
+                let shown = 0;
+                cards.each(function() {
+                    const matches = normalizeSearch($(this).find('.product-title').text()).includes(search);
+                    this.hidden = !matches;
+                    if (matches) shown += 1;
+                });
+                $('#no-products').prop('hidden', shown !== 0);
+            });
             $('.kartik-rating').rating({
                 theme: 'krajee-svg',
                 filledStar: '<span class="krajee-icon krajee-icon-star"></span>',

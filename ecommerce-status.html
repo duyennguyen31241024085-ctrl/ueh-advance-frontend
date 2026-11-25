@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Giỏ hàng & Đặt hàng - UEH TechStore</title>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap.min.css">
     <style>
         body {
             font-family: 'Be Vietnam Pro', sans-serif;
@@ -52,6 +52,11 @@
             border-radius: 8px;
             border: 1px solid #eee;
         }
+        @media (max-width: 767px) {
+            .navbar-fixed-top { position: static; }
+            .navbar .navbar-nav { display: flex; flex-wrap: wrap; margin: 0; }
+            body { padding-top: 0; }
+        }
     </style>
 </head>
 <body>
@@ -59,11 +64,11 @@
     <nav class="navbar navbar-custom navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="ecommerce.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
+                <a class="navbar-brand" href="index.html"><i class="glyphicon glyphicon-flash"></i> UEH TechStore</a>
             </div>
             <ul class="nav navbar-nav">
-                <li><a href="ecommerce.html">Trang chủ</a></li>
-                <li><a href="ecommerce-detail.html">Chi tiết sản phẩm</a></li>
+                <li><a href="index.html">Trang chủ</a></li>
+                <li><a href="index.html#products">Sản phẩm</a></li>
                 <li class="active"><a href="ecommerce-status.html">Giỏ hàng & Đơn hàng</a></li>
             </ul>
         </div>
@@ -78,11 +83,11 @@
                     <form id="checkout-form" onsubmit="placeOrder(event)">
                         <div class="form-group">
                             <label>Họ và tên người nhận:</label>
-                            <input type="text" id="cus-name" class="form-control" value="Nguyễn Phan Thùy Duyên" required>
+                            <input type="text" id="cus-name" class="form-control" placeholder="Họ và tên" required>
                         </div>
                         <div class="form-group">
                             <label>Số điện thoại:</label>
-                            <input type="text" id="cus-phone" class="form-control" placeholder="0901 234 567" required>
+                            <input type="tel" id="cus-phone" class="form-control" placeholder="0901 234 567" required>
                         </div>
                         <div class="form-group">
                             <label>Địa chỉ nhận hàng:</label>
@@ -115,47 +120,40 @@
                 </div>
 
                 <div class="box-card">
-                    <h4><i class="glyphicon glyphicon-time"></i> Trạng thái đơn hàng đã đặt</h4>
+                    <h4><i class="glyphicon glyphicon-time"></i> Đơn hàng mô phỏng trên trình duyệt</h4>
                     <div id="orders-history">
-                        <!-- Đơn mặc định mẫu -->
-                        <div class="order-card" style="background:#f8f9fa;">
-                            <div class="row" style="align-items:center; display:flex; flex-wrap:wrap;">
-                                <div class="col-xs-3 col-sm-2">
-                                    <img class="order-img" src="mouse.jpg" alt="Chuột">
-                                </div>
-                                <div class="col-xs-9 col-sm-5">
-                                    <strong>Chuột không dây Logitech MX Master 3S</strong>
-                                    <div class="text-muted" style="font-size:12px;">Số lượng: 1 | Mã đơn: #UEH8821</div>
-                                </div>
-                                <div class="col-xs-6 col-sm-3" style="font-weight:700; color:#ff424e;">2.250.000 ₫</div>
-                                <div class="col-xs-6 col-sm-2 text-right">
-                                    <span class="label label-success" style="padding:6px 10px;">Giao thành công</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="products.js"></script>
+    <script src="store.js"></script>
     <script>
-        const localImages = {'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Sony_WH-1000XM3_headphones.jpg/640px-Sony_WH-1000XM3_headphones.jpg': 'headphones.jpg', 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/3-Tasten-Maus_Microsoft.jpg/640px-3-Tasten-Maus_Microsoft.jpg': 'mouse.jpg', 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Mechanical_keyboard_with_keycaps_removed.jpg/640px-Mechanical_keyboard_with_keycaps_removed.jpg': 'keyboard.jpg', 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Apple_Watch.jpg/640px-Apple_Watch.jpg': 'watch.jpg', 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Bluetooth_speaker_%2826363858509%29.jpg/640px-Bluetooth_speaker_%2826363858509%29.jpg': 'speaker.jpg', 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/MacBook_Air_M1.jpg/640px-MacBook_Air_M1.jpg': 'laptop.jpg'};
-
         function formatMoney(num) {
             return num.toLocaleString('vi-VN') + ' ₫';
         }
 
+        function displayImage(item) {
+            const product = Object.values(products).find(product => product.name === item.name);
+            return product ? product.img : 'headphones.jpg';
+        }
+
+        function escapeText(value) {
+            return $('<span>').text(value).html();
+        }
+
         function renderCart() {
-            var cart = JSON.parse(localStorage.getItem('ueh_cart')) || [];
+            var cart = readStore('ueh_cart');
             var container = $('#cart-items-container');
             container.empty();
             var total = 0;
 
             if (cart.length === 0) {
-                container.html('<p class="text-muted text-center" style="padding:20px;">Giỏ hàng đang trống. <a href="ecommerce.html">Quay lại chọn sản phẩm ngay!</a></p>');
+                container.html('<p class="text-muted text-center" style="padding:20px;">Giỏ hàng đang trống. <a href="index.html">Quay lại chọn sản phẩm ngay!</a></p>');
                 $('#cart-total').text('0 ₫');
                 return;
             }
@@ -165,11 +163,11 @@
                 total += itemTotal;
                 var row = '<div class="order-card" style="border:1px solid #eee;">' +
                     '<div class="row" style="align-items:center; display:flex; flex-wrap:wrap;">' +
-                        '<div class="col-xs-3 col-sm-2"><img class="order-img" src="' + (localImages[item.img] || item.img) + '"></div>' +
-                        '<div class="col-xs-9 col-sm-4"><strong>' + item.name + '</strong><div class="text-muted" style="font-size:12px;">' + item.variant + '</div></div>' +
-                        '<div class="col-xs-4 col-sm-2">SL: <strong>' + item.qty + '</strong></div>' +
+                        '<div class="col-xs-3 col-sm-2"><img class="order-img" alt="" src="' + displayImage(item) + '"></div>' +
+                        '<div class="col-xs-9 col-sm-4"><strong>' + escapeText(item.name) + '</strong><div class="text-muted" style="font-size:12px;">' + escapeText(item.variant) + '</div></div>' +
+                        '<div class="col-xs-4 col-sm-2">SL: <strong>' + Number(item.qty) + '</strong></div>' +
                         '<div class="col-xs-5 col-sm-3" style="font-weight:700; color:#ff424e;">' + formatMoney(itemTotal) + '</div>' +
-                        '<div class="col-xs-3 col-sm-1 text-right"><button class="btn btn-xs btn-danger" onclick="removeItem(' + index + ')"><i class="glyphicon glyphicon-trash"></i></button></div>' +
+                        '<div class="col-xs-3 col-sm-1 text-right"><button class="btn btn-xs btn-danger" aria-label="Xóa sản phẩm" onclick="removeItem(' + index + ')"><i class="glyphicon glyphicon-trash"></i></button></div>' +
                     '</div></div>';
                 container.append(row);
             });
@@ -178,7 +176,7 @@
         }
 
         function removeItem(index) {
-            var cart = JSON.parse(localStorage.getItem('ueh_cart')) || [];
+            var cart = readStore('ueh_cart');
             cart.splice(index, 1);
             localStorage.setItem('ueh_cart', JSON.stringify(cart));
             renderCart();
@@ -186,33 +184,38 @@
 
         function placeOrder(e) {
             e.preventDefault();
-            var cart = JSON.parse(localStorage.getItem('ueh_cart')) || [];
+            var cart = readStore('ueh_cart');
             if (cart.length === 0) {
                 alert('Giỏ hàng đang trống! Hãy chọn thêm sản phẩm trước khi đặt hàng.');
                 return;
             }
-            var cusName = $('#cus-name').val();
-            var cusAddr = $('#cus-address').val();
-            var orderId = '#UEH' + Math.floor(1000 + Math.random() * 9000);
-
-            cart.forEach(function(item) {
-                var orderHtml = '<div class="order-card" style="border-left:4px solid #0056b3;">' +
-                    '<div class="row" style="align-items:center; display:flex; flex-wrap:wrap;">' +
-                        '<div class="col-xs-3 col-sm-2"><img class="order-img" src="' + (localImages[item.img] || item.img) + '"></div>' +
-                        '<div class="col-xs-9 col-sm-5"><strong>' + item.name + '</strong>' +
-                        '<div class="text-muted" style="font-size:12px;">SL: ' + item.qty + ' | Mã đơn: ' + orderId + ' | Giao tới: ' + cusName + ' (' + cusAddr + ')</div></div>' +
-                        '<div class="col-xs-6 col-sm-3" style="font-weight:700; color:#ff424e;">' + formatMoney(item.price * item.qty) + '</div>' +
-                        '<div class="col-xs-6 col-sm-2 text-right"><span class="label label-info" style="padding:6px 10px;">Đang chuẩn bị hàng</span></div>' +
-                    '</div></div>';
-                $('#orders-history').prepend(orderHtml);
-            });
-
+            const orderId = '#UEH' + Date.now().toString().slice(-8);
+            const orders = readStore('ueh_orders');
+            orders.unshift({id:orderId, items:cart});
+            localStorage.setItem('ueh_orders', JSON.stringify(orders));
+            renderOrders();
+            e.target.reset();
             localStorage.removeItem('ueh_cart');
             renderCart();
             alert('🎉 Đặt hàng thành công! Mã đơn hàng của bạn là ' + orderId);
         }
 
+        function renderOrders() {
+            const orders = readStore('ueh_orders');
+            const history = $('#orders-history').empty();
+            if (!orders.length) history.text('Bạn chưa có đơn hàng.');
+            orders.forEach(order => {
+                const card = $('<div>').addClass('order-card').appendTo(history);
+                $('<strong>').text(order.id + ' · Đang chuẩn bị hàng').appendTo(card);
+                const lines = $('<ul>').appendTo(card);
+                order.items.forEach(item => {
+                    $('<li>').text(item.qty + ' × ' + item.name + ' · ' + formatMoney(item.qty * item.price)).appendTo(lines);
+                });
+            });
+        }
+
         $(document).ready(function() {
+            renderOrders();
             renderCart();
         });
     </script>

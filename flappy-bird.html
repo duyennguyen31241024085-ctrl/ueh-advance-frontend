@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chim giấy qua giá sách</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100svh;display:grid;place-items:center;padding:1rem;background:#102822;color:#fcf7df;font:1rem/1.5 system-ui,sans-serif}
+main{width:min(100%,720px)}
+h1{margin:0;font-size:clamp(1.65rem,5vw,2.75rem);line-height:1.15}
+header>p{margin:.5rem 0 1rem;color:#ccdcd2}
+.stage{position:relative;overflow:hidden;border-radius:1.25rem;border:2px solid #bfd5bf}
+canvas{display:block;width:100%;height:auto}
+.hud{position:absolute;inset:.65rem .65rem auto;display:flex;justify-content:space-between;pointer-events:none}
+.hud span{background:#102822;color:#fff7dc;padding:.3rem .65rem;border-radius:.5rem;font-weight:700}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:#10282265;padding:1rem;text-align:center}
+.overlay[hidden]{display:none}
+.panel{background:#102822;border:1px solid #bfd5bf;border-radius:1rem;padding:clamp(.75rem,3vw,1.75rem);max-width:28rem}
+h2{margin:0;font-size:clamp(1.25rem,4vw,2rem)}
+.panel p{margin:.4rem 0 1rem}
+button{border:0;border-radius:.6rem;padding:.55rem 1rem;background:#f6c55a;color:#14251d;font:inherit;font-weight:750;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid white;outline-offset:3px}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;margin-top:.75rem}
+footer a{color:#d4e8d8}
+kbd{font:inherit;font-weight:750}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Chim giấy qua giá sách</h1>
+<p>Nhấn <kbd>↓</kbd> hoặc bấm <strong>Vỗ cánh</strong> để vượt qua 50 cặp chồng sách.</p>
+</header>
+<div class="stage">
+<canvas id="scene" width="720" height="480" aria-label="Sân chơi chim giấy vượt chồng sách"></canvas>
+<div class="hud"><span id="level">Level 1</span><span id="score">Điểm 0 · Kỷ lục 0</span></div>
+<div class="overlay" id="overlay">
+<div class="panel">
+<h2 id="result" aria-live="polite">Sẵn sàng cất cánh?</h2>
+<p id="message">Luồn qua khoảng trống giữa hai chồng sách.</p>
+<button id="start" type="button">Bắt đầu</button>
+</div>
+</div>
+</div>
+<footer><button id="flap" type="button">Vỗ cánh ↓</button><a href="index.html">Về TechStore</a></footer>
+</main>
+<script>
+'use strict';
+const canvas = document.querySelector('#scene');
+const paint = canvas.getContext('2d');
+const levelLabel = document.querySelector('#level');
+const scoreLabel = document.querySelector('#score');
+const overlay = document.querySelector('#overlay');
+const result = document.querySelector('#result');
+const message = document.querySelector('#message');
+const start = document.querySelector('#start');
+const floor = 454;
+const birdX = 155;
+const radius = 13;
+const bookWidth = 72;
+const spacing = 230;
+const stages = [
+    {points: 0, interval: 40},
+    {points: 5, interval: 30},
+    {points: 20, interval: 25},
+    {points: 40, interval: 20}
+];
+let high = 0;
+try { high = Number(localStorage.getItem('ueh-paper-bird-best')) || 0; } catch {}
+let state = 'ready';
+let points, stage, bird, books, debt, last;
+function updateLabels() {
+    levelLabel.textContent = 'Level ' + (stage + 1);
+    scoreLabel.textContent = 'Điểm ' + points + ' · Kỷ lục ' + high;
+}
+function reset() {
+    points = 0;
+    stage = 0;
+    bird = {y: 215, speed: 0};
+    books = [];
+    debt = 0;
+    last = null;
+    addBooks(510);
+    addBooks(510 + spacing);
+    updateLabels();
+}
+function addBooks(x) {
+    const previous = books.at(-1);
+    const center = previous ? previous.center + (Math.random() - .5) * 88 : 224;
+    books.push({x, center: Math.max(145, Math.min(305, center)), gap: 174 - stage * 7, passed: false});
+}
+function finish(won) {
+    state = 'finished';
+    result.textContent = won ? 'Chiến thắng!' : 'Chim giấy hạ cánh!';
+    message.textContent = 'Bạn đã vượt qua ' + points + ' cặp chồng sách.';
+    start.textContent = 'Chơi lại';
+    overlay.hidden = false;
+    start.focus({preventScroll: true});
+}
+function flap() {
+    if (state !== 'playing') {
+        reset();
+        state = 'playing';
+        overlay.hidden = true;
+        document.querySelector('#flap').focus({preventScroll: true});
+    }
+    bird.speed = -385;
+}
+function credit() {
+    points += 1;
+    if (points > high) {
+        high = points;
+        try { localStorage.setItem('ueh-paper-bird-best', high); } catch {}
+    }
+    if (points === stages[stage + 1]?.points) stage += 1;
+    updateLabels();
+    if (points === 50) finish(true);
+}
+function step(ms) {
+    const elapsed = ms / 1000;
+    bird.y += bird.speed * elapsed + 570 * elapsed ** 2;
+    bird.speed += 1140 * elapsed;
+    if (bird.y - radius <= 0 || bird.y + radius >= floor) {
+        finish(false);
+        return;
+    }
+    for (const book of books) {
+        book.x -= 6.8;
+        const touches = book.x < birdX + radius && book.x + bookWidth > birdX - radius;
+        if (touches && (bird.y - radius < book.center - book.gap / 2 || bird.y + radius > book.center + book.gap / 2)) {
+            finish(false);
+            return;
+        }
+        if (!book.passed && book.x + bookWidth < birdX - radius) {
+            book.passed = true;
+            credit();
+            if (state !== 'playing') return;
+        }
+    }
+    if (books[0].x + bookWidth < 0) books.shift();
+    if (books.at(-1).x < canvas.width - spacing + bookWidth) addBooks(books.at(-1).x + spacing);
+}
+function stack(x, top, bottom) {
+    const colors = ['#4a7763', '#bf634e', '#39586b', '#9a6b42'];
+    paint.save();
+    paint.beginPath();
+    paint.rect(x, top, bookWidth, bottom - top);
+    paint.clip();
+    for (let y = top, i = 0; y < bottom; y += 19, i++) {
+        paint.fillStyle = colors[i % colors.length];
+        paint.fillRect(x, y, bookWidth, 18);
+        paint.fillStyle = '#fff0c9';
+        paint.fillRect(x + 8, y + 4, 37, 10);
+        paint.fillStyle = '#c5a881';
+        paint.fillRect(x + 11, y + 8, 31, 1);
+        paint.fillRect(x + 11, y + 11, 25, 1);
+    }
+    paint.restore();
+}
+function triangle(color, points) {
+    paint.fillStyle = color;
+    paint.beginPath();
+    paint.moveTo(...points[0]);
+    for (const point of points.slice(1)) paint.lineTo(...point);
+    paint.closePath();
+    paint.fill();
+}
+function draw(ahead) {
+    const sky = paint.createLinearGradient(0, 0, 0, floor);
+    sky.addColorStop(0, '#bdd8c9');
+    sky.addColorStop(1, '#f5e6bd');
+    paint.fillStyle = sky;
+    paint.fillRect(0, 0, canvas.width, canvas.height);
+    paint.fillStyle = '#ffe5a1';
+    paint.beginPath();
+    paint.arc(573, 92, 41, 0, Math.PI * 2);
+    paint.fill();
+    paint.fillStyle = '#94ad92';
+    for (const x of [66, 211, 356, 501, 646]) {
+        paint.fillRect(x, 234, 9, 220);
+        paint.beginPath();
+        paint.ellipse(x + 4, 237, 34, 63, 0, 0, Math.PI * 2);
+        paint.fill();
+    }
+    for (const book of books) {
+        const x = book.x - ahead * 6.8 / stages[stage].interval;
+        stack(x, 0, book.center - book.gap / 2);
+        stack(x, book.center + book.gap / 2, floor);
+    }
+    paint.fillStyle = '#436357';
+    paint.fillRect(0, floor, canvas.width, canvas.height - floor);
+    paint.save();
+    paint.translate(birdX, bird.y + bird.speed * ahead / 1000 + 570 * (ahead / 1000) ** 2);
+    paint.rotate(Math.max(-.27, Math.min(.4, bird.speed / 1500)));
+    triangle('#85582d', [[-29, 0], [26, -13], [-9, 19]]);
+    triangle('#ffe29a', [[-28, -2], [26, -13], [-8, 15]]);
+    triangle('#fff7d2', [[-28, -2], [26, -13], [-3, 3]]);
+    triangle('#d18c3d', [[-3, 3], [26, -13], [2, 10]]);
+    paint.restore();
+}
+function frame(now) {
+    if (state === 'playing') {
+        if (last !== null) debt += Math.min(now - last, 60);
+        last = now;
+        while (state === 'playing' && debt >= stages[stage].interval) {
+            const interval = stages[stage].interval;
+            debt -= interval;
+            step(interval);
+        }
+    }
+    draw(state === 'playing' ? debt : 0);
+    requestAnimationFrame(frame);
+}
+start.addEventListener('click', flap);
+document.querySelector('#flap').addEventListener('click', flap);
+window.addEventListener('keydown', event => {
+    if (event.key !== 'ArrowDown') return;
+    event.preventDefault();
+    if (!event.repeat) flap();
+});
+document.addEventListener('visibilitychange', () => { last = null; debt = 0; });
+reset();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
