@@ -290,7 +290,12 @@
             $('.progress-bar').attr({role:'progressbar', 'aria-valuenow': product.stock, 'aria-valuemin': 0, 'aria-valuemax': 100})
                 .css('width', product.stock + '%').text(product.stock + '%');
             $('.progress').after($('<p>').text('Đã bán ' + product.stock + '% lượng hàng'));
-            $('#prod-qty').attr('max', 100 - product.stock);
+            const available = remainingStock(product);
+            $('#prod-qty').attr('max', available).prop('disabled', !available);
+            $('#product-form button[type=submit]').prop('disabled', !available);
+            $('#product-form').append($('<p class="text-muted">').text(available
+                ? 'Có thể thêm ' + available + ' sản phẩm vào giỏ.'
+                : 'Giỏ của bạn đã có đủ số lượng còn trong kho.'));
             if (product !== products.headphones) {
                 $('#prod-color').empty().append($('<option>').text(product.variant));
             }

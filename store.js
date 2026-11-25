@@ -12,13 +12,17 @@ function normalizeSearch(text) {
         .replace(/[\u0300-\u036f]/g, '').replaceAll('đ', 'd');
 }
 
+function remainingStock(product, cart = readStore('ueh_cart')) {
+    const inCart = cart.reduce((total, item) =>
+        item.name === product.name ? total + (Number(item.qty) || 0) : total, 0);
+    return Math.max(0, 100 - product.stock - inCart);
+}
+
 function addProduct(id, qty, variant, warranty = 12) {
     const product = products[id];
     if (!product || !Number.isInteger(qty) || qty < 1) return false;
     const cart = readStore('ueh_cart');
-    const alreadyAdded = cart.reduce((sum, item) =>
-        item.name === product.name ? sum + Number(item.qty) : sum, 0);
-    if (alreadyAdded + qty > 100 - product.stock) return false;
+    if (qty > remainingStock(product, cart)) return false;
 
     const choice = variant || product.variant;
     const price = product.price + (warranty === 24 ? 300000 : 0);
