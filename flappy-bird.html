@@ -30,7 +30,7 @@ kbd{font:inherit;font-weight:750}
 <main>
 <header>
 <h1>Chim giấy qua giá sách</h1>
-<p>Nhấn <kbd>↓</kbd> hoặc bấm <strong>Vỗ cánh</strong> để vượt qua 50 cặp chồng sách.</p>
+<p>Nhấn <kbd>↓</kbd> hoặc bấm <strong>Vỗ cánh</strong> để vượt qua 50 cặp chồng sách. Bấm từng nhịp, đừng giữ phím.</p>
 </header>
 <div class="stage">
 <canvas id="scene" width="720" height="480" aria-label="Sân chơi chim giấy vượt chồng sách"></canvas>
@@ -38,7 +38,7 @@ kbd{font:inherit;font-weight:750}
 <div class="overlay" id="overlay">
 <div class="panel">
 <h2 id="result" aria-live="polite">Sẵn sàng cất cánh?</h2>
-<p id="message">Luồn qua khoảng trống giữa hai chồng sách.</p>
+<p id="message">Bấm từng nhịp ngắn để giữ chim ở giữa khe.</p>
 <button id="start" type="button">Bắt đầu</button>
 </div>
 </div>
@@ -57,7 +57,9 @@ const message = document.querySelector('#message');
 const start = document.querySelector('#start');
 const floor = 454;
 const birdX = 155;
-const radius = 13;
+const radius = 10;
+const gravity = 560;
+const flapSpeed = -235;
 const bookWidth = 72;
 const spacing = 230;
 const stages = [
@@ -81,14 +83,14 @@ function reset() {
     books = [];
     debt = 0;
     last = null;
-    addBooks(510);
-    addBooks(510 + spacing);
+    addBooks(360);
+    addBooks(360 + spacing);
     updateLabels();
 }
 function addBooks(x) {
     const previous = books.at(-1);
-    const center = previous ? previous.center + (Math.random() - .5) * 88 : 224;
-    books.push({x, center: Math.max(145, Math.min(305, center)), gap: 174 - stage * 7, passed: false});
+    const center = previous ? previous.center + (Math.random() - .5) * 44 : 224;
+    books.push({x, center: Math.max(175, Math.min(275, center)), gap: 242 - stage * 8, passed: false});
 }
 function finish(won) {
     state = 'finished';
@@ -105,7 +107,7 @@ function flap() {
         overlay.hidden = true;
         document.querySelector('#flap').focus({preventScroll: true});
     }
-    bird.speed = -385;
+    bird.speed = flapSpeed;
 }
 function credit() {
     points += 1;
@@ -119,8 +121,8 @@ function credit() {
 }
 function step(ms) {
     const elapsed = ms / 1000;
-    bird.y += bird.speed * elapsed + 570 * elapsed ** 2;
-    bird.speed += 1140 * elapsed;
+    bird.y += bird.speed * elapsed + gravity / 2 * elapsed ** 2;
+    bird.speed += gravity * elapsed;
     if (bird.y - radius <= 0 || bird.y + radius >= floor) {
         finish(false);
         return;
@@ -191,7 +193,7 @@ function draw(ahead) {
     paint.fillStyle = '#436357';
     paint.fillRect(0, floor, canvas.width, canvas.height - floor);
     paint.save();
-    paint.translate(birdX, bird.y + bird.speed * ahead / 1000 + 570 * (ahead / 1000) ** 2);
+    paint.translate(birdX, bird.y + bird.speed * ahead / 1000 + gravity / 2 * (ahead / 1000) ** 2);
     paint.rotate(Math.max(-.27, Math.min(.4, bird.speed / 1500)));
     triangle('#85582d', [[-29, 0], [26, -13], [-9, 19]]);
     triangle('#ffe29a', [[-28, -2], [26, -13], [-8, 15]]);
