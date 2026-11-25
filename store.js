@@ -38,3 +38,14 @@ function addProduct(id, qty, variant, warranty = 12) {
     localStorage.setItem('ueh_cart', JSON.stringify(cart));
     return true;
 }
+
+function productReviews(id) {
+    return readStore('ueh_reviews_' + id).filter(review =>
+        review && typeof review.text === 'string' &&
+        Number.isFinite(Number(review.rate)) && Number(review.rate) >= 0.5 && Number(review.rate) <= 5);
+}
+
+function averageRating(reviews) {
+    if (!reviews.length) return 0;
+    return reviews.reduce((sum, review) => sum + Number(review.rate), 0) / reviews.length;
+}

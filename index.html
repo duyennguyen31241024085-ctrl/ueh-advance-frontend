@@ -302,8 +302,8 @@
                                     </div>
                                 </div>
                                 <div class="rating-row">
-                                    <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html?product=headphones#comments" class="review-count">(48 đánh giá)</a>
+                                    <input class="kartik-rating" value="0" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html?product=headphones#comments" class="review-count">Đánh giá sản phẩm</a>
                                 </div>
                                 <button class="btn btn-primary btn-block" onclick="addToCart('headphones')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
@@ -334,8 +334,8 @@
                                     </div>
                                 </div>
                                 <div class="rating-row">
-                                    <input class="kartik-rating" value="4.5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html?product=mouse#comments" class="review-count">(112 đánh giá)</a>
+                                    <input class="kartik-rating" value="0" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html?product=mouse#comments" class="review-count">Đánh giá sản phẩm</a>
                                 </div>
                                 <button class="btn btn-primary btn-block" onclick="addToCart('mouse')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
@@ -366,8 +366,8 @@
                                     </div>
                                 </div>
                                 <div class="rating-row">
-                                    <input class="kartik-rating" value="4" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html?product=keyboard#comments" class="review-count">(29 đánh giá)</a>
+                                    <input class="kartik-rating" value="0" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html?product=keyboard#comments" class="review-count">Đánh giá sản phẩm</a>
                                 </div>
                                 <button class="btn btn-primary btn-block" onclick="addToCart('keyboard')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
@@ -398,8 +398,8 @@
                                     </div>
                                 </div>
                                 <div class="rating-row">
-                                    <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html?product=watch#comments" class="review-count">(84 đánh giá)</a>
+                                    <input class="kartik-rating" value="0" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html?product=watch#comments" class="review-count">Đánh giá sản phẩm</a>
                                 </div>
                                 <button class="btn btn-primary btn-block" onclick="addToCart('watch')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
@@ -430,8 +430,8 @@
                                     </div>
                                 </div>
                                 <div class="rating-row">
-                                    <input class="kartik-rating" value="4.5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html?product=speaker#comments" class="review-count">(37 đánh giá)</a>
+                                    <input class="kartik-rating" value="0" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html?product=speaker#comments" class="review-count">Đánh giá sản phẩm</a>
                                 </div>
                                 <button class="btn btn-primary btn-block" onclick="addToCart('speaker')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
@@ -462,8 +462,8 @@
                                     </div>
                                 </div>
                                 <div class="rating-row">
-                                    <input class="kartik-rating" value="5" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
-                                    <a href="ecommerce-detail.html?product=laptop#comments" class="review-count">(156 đánh giá)</a>
+                                    <input class="kartik-rating" value="0" data-size="xs" data-readonly="true" data-show-clear="false" data-show-caption="false">
+                                    <a href="ecommerce-detail.html?product=laptop#comments" class="review-count">Đánh giá sản phẩm</a>
                                 </div>
                                 <button class="btn btn-primary btn-block" onclick="addToCart('laptop')">
                                     <i class="glyphicon glyphicon-shopping-cart"></i> Thêm vào giỏ hàng
@@ -514,6 +514,14 @@
                     if (matches) shown += 1;
                 });
                 $('#no-products').prop('hidden', shown !== 0);
+            });
+            $('.review-count').each(function() {
+                const id = new URL(this.href).searchParams.get('product');
+                const reviews = productReviews(id);
+                if (reviews.length) {
+                    $(this).text(reviews.length + ' đánh giá');
+                    $(this).siblings('.kartik-rating').val(averageRating(reviews));
+                }
             });
             $('.kartik-rating').rating({
                 theme: 'krajee-svg',

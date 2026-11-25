@@ -58,8 +58,9 @@
         .cart-line h3 { font-size: 16px; margin: 0 0 4px; line-height: 1.4; }
         .cart-line p { margin-bottom: 4px; }
         .cart-actions { display: flex; gap: 10px 16px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
-        .cart-quantity { display: inline-flex; align-items: center; gap: 8px; }
-        .cart-quantity button { min-width: 38px; min-height: 38px; font-size: 18px; padding: 3px; }
+        .cart-quantity { display: inline-flex; align-items: center; gap: 8px; padding: 2px; border: 1px solid #cbd9ea; border-radius: 9px; background: #f3f8ff; }
+        .quantity-label { font-weight: 600; }
+        .cart-quantity button { min-width: 44px; min-height: 44px; font-size: 22px; padding: 3px; color: #174f8d; font-weight: 700; }
         .cart-quantity span { min-width: 2ch; text-align: center; font-weight: 700; }
         .cart-subtotal { margin-left: auto; font-weight: 700; color: #174f8d; }
         .cart-remove { color: #a12738; padding: 6px 2px; }
@@ -187,6 +188,7 @@
                 $('<p class="text-muted">').text(formatMoney(Number(item.price)) + ' mỗi sản phẩm').appendTo(details);
 
                 const actions = $('<div class="cart-actions">').appendTo(details);
+                $('<span class="quantity-label">').text('Số lượng').appendTo(actions);
                 const quantity = $('<div class="cart-quantity" role="group" aria-label="Số lượng">').appendTo(actions);
                 function quantityButton(delta, symbol, label, disabled) {
                     const button = $('<button type="button" class="btn btn-default">').text(symbol)
@@ -202,6 +204,9 @@
                     $('<span aria-live="polite">').text(qty),
                     quantityButton(1, '+', 'Tăng số lượng', !match || remainingStock(match[1], cart) === 0)
                 );
+                if (match && remainingStock(match[1], cart) === 0) {
+                    $('<p class="text-muted">').text('Đã đạt giới hạn tồn kho.').appendTo(details);
+                }
                 $('<button type="button" class="btn btn-link cart-remove">').text('Xóa')
                     .attr('aria-label', 'Xóa ' + item.name).on('click', () => removeItem(index)).appendTo(actions);
                 $('<strong class="cart-subtotal">').text(formatMoney(item.price * qty)).appendTo(actions);

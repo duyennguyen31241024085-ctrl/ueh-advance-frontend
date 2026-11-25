@@ -77,6 +77,14 @@
             .navbar .navbar-nav { display: flex; flex-wrap: wrap; margin: 0; }
             body { padding-top: 0; }
         }
+        .review-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .review-header h2 { font-size: 21px; font-weight: 700; margin: 0 0 4px; }
+        .review-score { background: #edf5ff; color: #174f8d; border-radius: 10px; padding: 10px 14px; }
+        .review-score strong { font-size: 22px; }
+        .review-form { background: #f6f8fb; border: 1px solid #dce6f1; padding: 16px; border-radius: 10px; margin-bottom: 18px; }
+        .review-form textarea { resize: vertical; }
+        .review-item { padding: 12px 0; border-bottom: 1px solid #dce6f1; }
+        .review-item p { white-space: pre-wrap; overflow-wrap: anywhere; }
     </style>
 </head>
 <body>
@@ -178,22 +186,28 @@
                     </div>
                 </div>
 
-                <!-- Khu vực đánh giá bằng Kartik-v Bootstrap Star Rating -->
-                <div class="review-box" id="comments">
-                    <h4 style="font-weight:700; margin-top:0;">Đánh giá & Nhận xét từ khách hàng</h4>
-                    <div class="well" style="background:#f8f9fa; border:none;">
-                        <label>Gửi đánh giá của bạn cho sản phẩm này:</label>
-                        <input id="user-rate" class="kartik-rating" value="5" data-size="sm">
-                        <div class="input-group" style="margin-top:10px;">
-                            <input type="text" id="review-text" class="form-control" placeholder="Nhập cảm nhận của bạn về chất lượng sản phẩm...">
-                            <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" onclick="addReview()">Gửi đánh giá</button>
-                            </span>
+                <section class="review-box" id="comments" aria-labelledby="review-heading">
+                    <div class="review-header">
+                        <div>
+                            <h2 id="review-heading">Đánh giá sản phẩm</h2>
+                            <p id="review-product" class="text-muted"></p>
                         </div>
+                        <div class="review-score" aria-live="polite"><strong id="review-average"></strong> <span id="review-count"></span></div>
                     </div>
-
+                    <form class="review-form" id="review-form">
+                        <label for="user-rate">Chọn số sao</label>
+                        <input id="user-rate" class="kartik-rating" value="0" data-size="sm" data-show-caption="false">
+                        <div class="form-group">
+                            <label for="review-text">Nhận xét của bạn</label>
+                            <textarea id="review-text" class="form-control" rows="3" maxlength="500" required
+                                placeholder="Sản phẩm có điểm gì tốt hoặc cần cải thiện?"></textarea>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Gửi đánh giá</button>
+                        <p class="help-block">Đánh giá được lưu trên trình duyệt này.</p>
+                        <p id="review-feedback" role="status"></p>
+                    </form>
                     <div id="review-list"></div>
-                </div>
+                </section>
             </div>
         </div>
     </div>
@@ -236,30 +250,43 @@
         }
 
         function renderReviews() {
-            const reviews = readStore('ueh_reviews_' + key);
+            const reviews = productReviews(key);
             const list = $('#review-list').empty();
-            if (!reviews.length) list.text('Chưa có nhận xét trên thiết bị này.');
+            $('#review-average').text(reviews.length
+                ? averageRating(reviews).toLocaleString('vi-VN', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '/5'
+                : 'Chưa có điểm');
+            $('#review-count').text(reviews.length + ' lượt đánh giá');
+            if (!reviews.length) list.text('Chưa có nhận xét cho sản phẩm này.');
             reviews.forEach(review => {
-                const item = $('<div class="media">').appendTo(list);
-                $('<input>').val(review.rate).appendTo(item).rating({
+                const item = $('<article class="review-item">').appendTo(list);
+                const date = new Date(review.createdAt);
+                $('<strong>').text('Đánh giá của bạn').appendTo(item);
+                if (Number.isFinite(date.getTime())) {
+                    $('<time class="text-muted">').attr('datetime', date.toISOString())
+                        .text(' · ' + date.toLocaleDateString('vi-VN')).appendTo(item);
+                }
+                $('<input>').attr('aria-label', 'Điểm đánh giá').val(review.rate).appendTo(item).rating({
                     theme: 'krajee-svg', readonly: true, size: 'xs', showClear: false, showCaption: false
                 });
                 $('<p>').text(review.text).appendTo(item);
             });
         }
 
-        function addReview() {
+        function addReview(event) {
+            event.preventDefault();
             const text = $('#review-text').val().trim();
             const rate = Number($('#user-rate').val());
-            if (!text || rate < 0.5 || rate > 5 || !Number.isFinite(rate)) {
-                alert('Chọn số sao và nhập nội dung đánh giá.');
+            const feedback = $('#review-feedback');
+            if (!text || text.length > 500 || !Number.isFinite(rate) || rate < 0.5 || rate > 5) {
+                feedback.text('Hãy chọn số sao và nhập nhận xét tối đa 500 ký tự.');
                 return;
             }
-            const keyForReviews = 'ueh_reviews_' + key;
-            const reviews = readStore(keyForReviews);
-            reviews.unshift({text, rate});
-            localStorage.setItem(keyForReviews, JSON.stringify(reviews));
+            const reviews = productReviews(key);
+            reviews.unshift({text, rate, createdAt: new Date().toISOString()});
+            localStorage.setItem('ueh_reviews_' + key, JSON.stringify(reviews));
             $('#review-text').val('');
+            $('#user-rate').rating('clear');
+            feedback.text('Đã lưu đánh giá của bạn.');
             renderReviews();
         }
 
@@ -280,6 +307,8 @@
             }
             document.title = product.name + ' | UEH TechStore';
             $('#product-description').text(product.description);
+            $('#review-product').text(product.name);
+            $('#review-form').on('submit', addReview);
             $('#product-form').on('submit', buyNow);
             const money = value => value.toLocaleString('vi-VN') + ' ₫';
             $('#product-name').text(product.name);
